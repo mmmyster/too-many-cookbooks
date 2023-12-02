@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.effect.Reflection?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19.0.2.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button layoutX="150.0" layoutY="145.0" mnemonicParsing="false" prefHeight="108.0" prefWidth="300.0" style="-fx-background-color: #bada55;" text="COOK SOME BOOKS!">
+         <font>
+            <Font size="24.0" />
+         </font>
+         <effect>
+            <Reflection fraction="0.62" topOpacity="0.46" />
+         </effect>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+   </children>
+</AnchorPane>
