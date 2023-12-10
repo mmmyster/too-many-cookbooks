@@ -7,8 +7,13 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
+import sk.catsname.cookbooks.storage.DaoFactory;
+import sk.catsname.cookbooks.storage.RecipeDao;
+
+import java.sql.Timestamp;
 
 public class RecipeEditController {
+    Recipe savedRecipe;
 
     @FXML
     private Button addIngredientButton;
@@ -17,7 +22,7 @@ public class RecipeEditController {
     private Button addRecipeButton;
 
     @FXML
-    private Spinner<?> amountSpinner;
+    private Spinner<?> ingredientAmountSpinner;
 
     @FXML
     private TextField ingredientNameTextField;
@@ -61,6 +66,10 @@ public class RecipeEditController {
     @FXML
     void onAddRecipe(ActionEvent event) {
         Recipe recipe = recipeModel.getRecipe();
+        RecipeDao recipeDao = DaoFactory.INSTANCE.getRecipeDao();
+        recipe.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        recipe.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        savedRecipe = recipeDao.save(recipe);
         System.out.println(recipe);
     }
 }
