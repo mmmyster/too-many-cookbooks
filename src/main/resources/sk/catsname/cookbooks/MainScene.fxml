@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19.0.2.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button layoutX="150.0" layoutY="145.0" mnemonicParsing="false" prefHeight="108.0" prefWidth="300.0" style="-fx-background-color: #bada55;" text="COOK SOME BOOKS!">
+      <Button fx:id="addRecipeButton" layoutX="150.0" layoutY="145.0" mnemonicParsing="false" prefHeight="108.0" prefWidth="300.0" style="-fx-background-color: #bada55;" text="COOK SOME BOOKS!">
          <font>
             <Font size="24.0" />
          </font>
