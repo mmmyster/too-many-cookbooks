@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 
 public class RecipeEditController {
+
     @FXML
     private Button addIngredientButton;
 
@@ -44,15 +45,22 @@ public class RecipeEditController {
 
     @FXML
     public void initialize() {
+        recipeNameTextField.textProperty().bindBidirectional(recipeModel.nameProperty());
+        instructionsTextArea.textProperty().bindBidirectional(recipeModel.instructionsProperty());
+        prepTimeTextField.textProperty().bindBidirectional(recipeModel.preparationTimeProperty());
+        servingsTextField.textProperty().bindBidirectional(recipeModel.servingsProperty());
     }
 
     @FXML
     void onAddIngredient(ActionEvent event) {
-
+        String name = ingredientNameTextField.getText().trim();
+        Ingredient ingredient = new Ingredient(name);
+        recipeModel.ingredientsModel().add(ingredient);
     }
 
     @FXML
     void onAddRecipe(ActionEvent event) {
-
+        Recipe recipe = recipeModel.getRecipe();
+        System.out.println(recipe);
     }
 }

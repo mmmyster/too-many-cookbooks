@@ -15,9 +15,9 @@
    <content>
       <AnchorPane prefHeight="459.0" prefWidth="583.0" style="-fx-background-color: #fff;" stylesheets="@style.css">
          <children>
-            <HBox layoutX="85.0" layoutY="289.0" prefHeight="100.0" prefWidth="413.0" styleClass="input-field">
+            <HBox layoutX="85.0" layoutY="305.0" prefHeight="100.0" prefWidth="413.0" styleClass="input-field">
                <children>
-                  <TextArea maxHeight="-Infinity" prefHeight="96.0" prefWidth="483.0" wrapText="true" />
+                  <TextArea fx:id="instructionsTextArea" maxHeight="-Infinity" prefHeight="96.0" prefWidth="483.0" wrapText="true" />
                </children>
             </HBox>
             <TextField fx:id="recipeNameTextField" layoutX="140.0" layoutY="75.0" prefHeight="0.0" prefWidth="160.0" styleClass="input-field" stylesheets="@style.css" />
@@ -26,17 +26,18 @@
             <Label layoutX="86.0" layoutY="137.0" text="Preparation time:" />
             <TextField fx:id="servingsTextField" layoutX="357.0" layoutY="131.0" prefHeight="26.0" prefWidth="47.0" styleClass="input-field" />
             <Label layoutX="292.0" layoutY="136.0" text="Servings:" />
-            <Button layoutX="455.0" layoutY="411.0" mnemonicParsing="false" text="Save" />
+            <Button fx:id="addRecipeButton" layoutX="454.0" layoutY="421.0" mnemonicParsing="false" onAction="#onAddRecipe" text="Save" />
             <Label layoutX="45.0" layoutY="22.0" text="New recipe" textFill="#d5c729">
                <font>
                   <Font name="Full-House20" size="25.0" />
                </font>
             </Label>
-            <TextField fx:id="ingredientNameTextField" layoutX="86.0" layoutY="239.0" prefHeight="28.0" prefWidth="174.0" styleClass="input-field" />
-            <Spinner layoutX="285.0" layoutY="239.0" prefHeight="26.0" prefWidth="64.0" styleClass="input-field" />
-            <ComboBox layoutX="365.0" layoutY="240.0" prefHeight="26.0" prefWidth="59.0" />
-            <Button layoutX="471.0" layoutY="240.0" mnemonicParsing="false" text="+" />
-            <Label layoutX="87.0" layoutY="203.0" text="Add ingredient:" />
+            <TextField fx:id="ingredientNameTextField" layoutX="86.0" layoutY="217.0" prefHeight="28.0" prefWidth="174.0" styleClass="input-field" />
+            <Spinner fx:id="amountSpinner" layoutX="285.0" layoutY="217.0" prefHeight="26.0" prefWidth="64.0" styleClass="input-field" />
+            <ComboBox fx:id="unitComboBox" layoutX="365.0" layoutY="218.0" prefHeight="26.0" prefWidth="59.0" />
+            <Button fx:id="addIngredientButton" layoutX="471.0" layoutY="218.0" mnemonicParsing="false" onAction="#onAddIngredient" text="+" />
+            <Label layoutX="87.0" layoutY="189.0" text="Add ingredient:" />
+            <Label layoutX="87.0" layoutY="277.0" text="Instructions:" />
          </children>
       </AnchorPane>
    </content>
