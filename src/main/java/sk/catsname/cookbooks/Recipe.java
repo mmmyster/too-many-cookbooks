@@ -1,26 +1,57 @@
 package sk.catsname.cookbooks;
 
 import java.awt.*;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class Recipe {
+    private Long id;
     private String name;
     private Image image;
     private float preparationTime;
     private int servings;
     private List<Ingredient> ingredients;
     private String instructions;
+    Timestamp createdAt;
+    Timestamp updatedAt;
 
     public Recipe() {
     }
 
-    public Recipe(String name, Image image, float preparationTime, int servings, List<Ingredient> ingredients, String instructions) {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Recipe(Long id, String name, Image image, float preparationTime, int servings, List<Ingredient> ingredients, String instructions, Timestamp createdAt, Timestamp updatedAt) {
+        this.id = id;
         this.name = name;
         this.image = image;
         this.preparationTime = preparationTime;
         this.servings = servings;
         this.ingredients = ingredients;
         this.instructions = instructions;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public String getName() {
@@ -73,6 +104,12 @@ public class Recipe {
 
     @Override
     public String toString() {
-        return "Recept: " + name + "\nČas na prípravu: " + preparationTime + " minút" + "\nPre " + servings + " osôb" + "\nIngrediencie: " + "\n" + ingredients + "\nPostup: " + instructions;
+        return "Recept: " + name +
+                "\nČas na prípravu: " + preparationTime + " minút" +
+                "\nPre " + servings + " osôb" +
+                "\nIngrediencie: " +
+                "\n" + ingredients +
+                "\nPostup: " + instructions +
+                "\nČas vytvorenia: " + KimKitsuragi.dateFormat.format(createdAt);
     }
 }

@@ -5,16 +5,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.awt.*;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeFxModel {
+    Long id;
     private SimpleStringProperty name = new SimpleStringProperty();
     private ObjectProperty<Image> image = new SimpleObjectProperty<>();
     private SimpleStringProperty preparationTime = new SimpleStringProperty();
     private SimpleStringProperty servings = new SimpleStringProperty();
     private ObservableList<Ingredient> ingredients;
     private SimpleStringProperty instructions = new SimpleStringProperty();
+    private ObjectProperty<Timestamp> createdAt = new SimpleObjectProperty<>();
+    private ObjectProperty<Timestamp> updatedAt = new SimpleObjectProperty<>();
 
     public RecipeFxModel() {
         ingredients = FXCollections.observableArrayList();
@@ -27,6 +31,8 @@ public class RecipeFxModel {
         setServings(recipe.getServings());
         ingredients = FXCollections.observableArrayList(getIngredients());
         setInstructions(recipe.getInstructions());
+        setCreatedAt(recipe.getCreatedAt());
+        setUpdatedAt(recipe.getUpdatedAt());
     }
 
     public String getName() {
@@ -97,7 +103,39 @@ public class RecipeFxModel {
         this.instructions.set(instructions);
     }
 
+    public Timestamp getCreatedAt() {
+        return createdAt.get();
+    }
+
+    public ObjectProperty<Timestamp> createdAtProperty() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt.set(createdAt);
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt.get();
+    }
+
+    public ObjectProperty<Timestamp> UpdatedAtProperty() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt.set(updatedAt);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Recipe getRecipe() {
-        return new Recipe(getName(), getImage(), Float.parseFloat(getPreparationTime()), Integer.parseInt(getServings()), getIngredients(), getInstructions());
+        return new Recipe(getId(), getName(), getImage(), Float.parseFloat(getPreparationTime()), Integer.parseInt(getServings()), getIngredients(), getInstructions(), getCreatedAt(), getUpdatedAt());
     }
 }

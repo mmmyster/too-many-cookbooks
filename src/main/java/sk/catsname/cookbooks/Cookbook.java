@@ -4,7 +4,8 @@ import java.awt.*;
 import java.util.List;
 
 public class Cookbook {
-    private Image thumbnail;
+    private long id;
+    private Image image;
     private String name;
     private List<Recipe> recipes;
 }
