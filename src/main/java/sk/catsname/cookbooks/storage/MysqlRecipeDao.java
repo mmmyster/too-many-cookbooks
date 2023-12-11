@@ -2,6 +2,7 @@ package sk.catsname.cookbooks.storage;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import sk.catsname.cookbooks.Ingredient;
 import sk.catsname.cookbooks.KimKitsuragi;
 import sk.catsname.cookbooks.Recipe;
 
@@ -38,6 +39,7 @@ public class MysqlRecipeDao implements RecipeDao{
         if (recipe.getId() == null) { // INSERT
             String query = "INSERT INTO recipe (name, image, prep_time, servings, instructions, created_at, updated_at) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
             GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(con -> {
                 PreparedStatement statement = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -51,7 +53,8 @@ public class MysqlRecipeDao implements RecipeDao{
                 return statement;
             }, keyHolder);
             Long id = keyHolder.getKey().longValue();
-            return new Recipe(
+
+            Recipe newRecipe = new Recipe(
                     id,
                     recipe.getName(),
                     recipe.getImage(),
@@ -62,6 +65,14 @@ public class MysqlRecipeDao implements RecipeDao{
                     recipe.getCreatedAt(),
                     recipe.getUpdatedAt()
             );
+
+            for (Ingredient ingredient : recipe.getIngredients()) { // saves the ingredients from the recipe
+                ingredient.setAmount(1337f); // TODO DELETE LATER
+                ingredient.setUnit("kg"); // TODO DELETE LATER
+                ingredientDao.save(ingredient, newRecipe);
+            }
+
+            return newRecipe;
         } else { // UPDATE
             String query = "UPDATE recipe SET name=?, image=?, prep_time=?, servings=?, instructions=?, created_at=?, updated_at=? " +
                     "WHERE id=?";
