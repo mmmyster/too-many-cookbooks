@@ -37,6 +37,7 @@
             <Label layoutX="87.0" layoutY="189.0" text="Add ingredient:" />
             <Label layoutX="87.0" layoutY="277.0" text="Instructions:" />
             <TextField fx:id="amountTextField" layoutX="294.0" layoutY="217.0" prefHeight="26.0" prefWidth="47.0" styleClass="input-field" />
+            <Button fx:id="addImageButton" layoutX="366.0" layoutY="76.0" mnemonicParsing="false" onAction="#onAddImage" text="Add image" />
          </children>
       </AnchorPane>
    </content>

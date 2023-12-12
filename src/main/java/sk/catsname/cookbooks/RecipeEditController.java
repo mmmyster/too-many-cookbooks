@@ -11,16 +11,22 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sk.catsname.cookbooks.storage.DaoFactory;
 import sk.catsname.cookbooks.storage.RecipeDao;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 
 public class RecipeEditController {
     Recipe savedRecipe;
+
+    @FXML
+    private Button addImageButton;
 
     @FXML
     private Button addIngredientButton;
@@ -64,6 +70,31 @@ public class RecipeEditController {
         ObservableList<String> units = FXCollections.observableArrayList("ml", "l", "dl", "tsp", "tbsp", "cup", "mg", "g", "kg");
         unitComboBox.getItems().clear();
         unitComboBox.setItems(units);
+    }
+
+    @FXML
+    void onAddImage(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+
+        // set extension filter
+        FileChooser.ExtensionFilter extFilterJPG
+                = new FileChooser.ExtensionFilter("JPG files (*.JPG)", "*.JPG");
+        FileChooser.ExtensionFilter extFilterJpg
+                = new FileChooser.ExtensionFilter("jpg files (*.jpg)", "*.jpg");
+        FileChooser.ExtensionFilter extFilterPNG
+                = new FileChooser.ExtensionFilter("PNG files (*.PNG)", "*.PNG");
+        FileChooser.ExtensionFilter extFilterPng
+                = new FileChooser.ExtensionFilter("png files (*.png)", "*.png");
+        fileChooser.getExtensionFilters()
+                .addAll(extFilterJPG, extFilterJpg, extFilterPNG, extFilterPng);
+
+        // show open file dialog
+        File file = fileChooser.showOpenDialog(null);
+
+        if (file != null) {
+            recipeModel.setImage(new Image(file.toURI().toString()));
+            System.out.println("Vybratý súbor: " + file); // TODO: test output, remove later
+        }
     }
 
     @FXML
