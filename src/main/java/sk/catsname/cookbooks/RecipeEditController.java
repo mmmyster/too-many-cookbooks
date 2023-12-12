@@ -4,13 +4,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import sk.catsname.cookbooks.storage.DaoFactory;
 import sk.catsname.cookbooks.storage.RecipeDao;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 
 public class RecipeEditController {
@@ -79,5 +85,21 @@ public class RecipeEditController {
         recipe.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         savedRecipe = recipeDao.save(recipe);
         System.out.println(recipe);
+
+        try {
+            RecipeViewController controller = new RecipeViewController();
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("RecipeView.fxml"));
+            loader.setController(controller);
+            Parent parent = loader.load();
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Recipe");
+            stage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
