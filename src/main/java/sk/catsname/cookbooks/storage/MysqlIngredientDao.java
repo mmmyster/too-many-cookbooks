@@ -51,7 +51,7 @@ public class MysqlIngredientDao implements IngredientDao {
         String sql = "SELECT i.id, i.name, ir.amount, ir.unit " +
                 "FROM ingredient AS i " +
                 "LEFT JOIN ingredient_recipe AS ir ON i.id = ir.ingredient_id " +
-                "WHERE ingredient_id = " + id;
+                "WHERE ir.ingredient_id = " + id;
 
         return jdbcTemplate.query(sql, ingredientRecipeRM());
     }
