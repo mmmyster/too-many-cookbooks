@@ -50,7 +50,7 @@ public class MysqlIngredientDao implements IngredientDao {
     public List<Ingredient> getAllByRecipeId(Long id) { // gets all ingredients based on recipe id
         String sql = "SELECT i.id, i.name, ir.amount, ir.unit " +
                 "FROM ingredient AS i " +
-                "LEFT JOIN ingredient_recipe AS ir ON i.id = ir.ingredient_id " +
+                "LEFT JOIN ingredient_recipe ir ON i.id = ir.ingredient_id " +
                 "WHERE ir.ingredient_id = " + id;
 
         return jdbcTemplate.query(sql, ingredientRecipeRM());
