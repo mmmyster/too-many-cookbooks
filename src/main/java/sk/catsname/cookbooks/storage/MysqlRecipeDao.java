@@ -1,11 +1,13 @@
 package sk.catsname.cookbooks.storage;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import sk.catsname.cookbooks.Ingredient;
 import sk.catsname.cookbooks.KimKitsuragi;
 import sk.catsname.cookbooks.Recipe;
 
+import javafx.scene.image.Image;
 import java.sql.*;
 import java.util.List;
 import java.util.Objects;
@@ -18,6 +20,25 @@ public class MysqlRecipeDao implements RecipeDao{
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    private RowMapper<Recipe> recipeRM() { // RowMapper for "ingredient" table
+        return new RowMapper<Recipe>() {
+            @Override
+            public Recipe mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Long id = rs.getLong("id");
+                String name = rs.getString("name");
+                Image image = KimKitsuragi.convertBlobToImage(rs.getBlob("image"));
+                Float prepTime = rs.getFloat("prep_time");
+                Integer servings = rs.getInt("servings");
+                List<Ingredient> ingredients = ingredientDao.getAllByRecipeId(id);
+                String instructions = rs.getString("instructions");
+                Timestamp createdAt = rs.getTimestamp("created_at");
+                Timestamp updatedAt = rs.getTimestamp("updated_at");
+
+                return new Recipe(id, name, image, prepTime, servings, ingredients, instructions, createdAt, updatedAt);
+            }
+        };
+    }
+
     @Override
     public List<Recipe> getAllByCookbookId(long id) {
         return null;
@@ -25,7 +46,10 @@ public class MysqlRecipeDao implements RecipeDao{
 
     @Override
     public Recipe getById(long id) throws EntityNotFoundException {
-        return null;
+        String sql = "SELECT id, name, image, prep_time, servings, instructions, created_at, updated_at " +
+                "FROM recipe WHERE id = " + id;
+
+        return jdbcTemplate.queryForObject(sql, recipeRM());
     }
 
     @Override

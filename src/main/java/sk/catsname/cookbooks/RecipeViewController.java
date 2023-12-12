@@ -10,6 +10,8 @@ import javafx.scene.image.ImageView;
 
 public class RecipeViewController {
 
+    private Recipe savedRecipe;
+
     @FXML
     private URL location;
     @FXML
@@ -21,12 +23,14 @@ public class RecipeViewController {
         recipeModel = new RecipeFxModel();
     }
 
+    public void setSavedRecipe(Recipe savedRecipe) {
+        this.savedRecipe = savedRecipe;
+    }
 
     @FXML
     void initialize() {
-        // TODO: get image from db
-        File file = new File("");
-        Image image = new Image(file.toURI().toString());
+        //File file = new File("");
+        Image image = savedRecipe.getImage();//new Image(file.toURI().toString());
         recipeImageView.setImage(image);
     }
 }

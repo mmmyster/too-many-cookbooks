@@ -9,12 +9,12 @@ public class Recipe {
     private Long id;
     private String name;
     private Image image;
-    private float preparationTime;
-    private int servings;
+    private Float preparationTime;
+    private Integer servings;
     private List<Ingredient> ingredients;
     private String instructions;
-    Timestamp createdAt;
-    Timestamp updatedAt;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     public Recipe() {
     }
@@ -43,7 +43,7 @@ public class Recipe {
         this.updatedAt = updatedAt;
     }
 
-    public Recipe(Long id, String name, Image image, float preparationTime, int servings, List<Ingredient> ingredients, String instructions, Timestamp createdAt, Timestamp updatedAt) {
+    public Recipe(Long id, String name, Image image, Float preparationTime, Integer servings, List<Ingredient> ingredients, String instructions, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -75,15 +75,15 @@ public class Recipe {
         return preparationTime;
     }
 
-    public void setPreparationTime(float preparationTime) {
+    public void setPreparationTime(Float preparationTime) {
         this.preparationTime = preparationTime;
     }
 
-    public int getServings() {
+    public Integer getServings() {
         return servings;
     }
 
-    public void setServings(int servings) {
+    public void setServings(Integer servings) {
         this.servings = servings;
     }
 
@@ -105,7 +105,7 @@ public class Recipe {
 
     @Override
     public String toString() {
-        return "Recept: " + name +
+        return "Recept: " + name + " (id=" + this.getId() + ")" +
                 "\nČas na prípravu: " + preparationTime + " minút" +
                 "\nPre " + servings + " osôb" +
                 "\nIngrediencie: " +

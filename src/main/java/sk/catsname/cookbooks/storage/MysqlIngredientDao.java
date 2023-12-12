@@ -38,20 +38,21 @@ public class MysqlIngredientDao implements IngredientDao {
             @Override
             public Ingredient mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Long ingredientId = rs.getLong("ingredient_id");
+                String name = rs.getString("name");
                 Float amount = rs.getFloat("amount");
                 String unit = rs.getString("unit");
 
-                return new Ingredient(ingredientId, null, amount, unit);
+                return new Ingredient(ingredientId, name, amount, unit);
             }
         };
     }
 
     @Override
     public List<Ingredient> getAllByRecipeId(Long id) { // gets all ingredients based on recipe id
-        String sql = "SELECT i.id, i.name, ir.amount, ir.unit " +
-                "FROM ingredient AS i " +
+        String sql = "SELECT ir.ingredient_id, i.name, ir.amount, ir.unit " +
+                "FROM ingredient i " +
                 "LEFT JOIN ingredient_recipe ir ON i.id = ir.ingredient_id " +
-                "WHERE ir.ingredient_id = " + id;
+                "WHERE ir.recipe_id = " + id;
 
         return jdbcTemplate.query(sql, ingredientRecipeRM());
     }

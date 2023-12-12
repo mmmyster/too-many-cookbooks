@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 
 public class RecipeEditController {
+    RecipeDao recipeDao = DaoFactory.INSTANCE.getRecipeDao();
     Recipe savedRecipe;
 
     @FXML
@@ -115,10 +116,12 @@ public class RecipeEditController {
         recipe.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         recipe.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         savedRecipe = recipeDao.save(recipe);
-        System.out.println(recipe);
+        Recipe loadedRecipe = recipeDao.getById(savedRecipe.getId());
+        System.out.println(loadedRecipe);
 
         try {
             RecipeViewController controller = new RecipeViewController();
+            controller.setSavedRecipe(loadedRecipe);
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("RecipeView.fxml"));
             loader.setController(controller);
