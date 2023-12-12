@@ -1,6 +1,7 @@
 package sk.catsname.cookbooks;
 
-import java.awt.*;
+import javafx.scene.image.Image;
+
 import java.sql.Timestamp;
 import java.util.List;
 

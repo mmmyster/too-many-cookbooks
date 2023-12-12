@@ -3,8 +3,8 @@ package sk.catsname.cookbooks;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.image.Image;
 
-import java.awt.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
