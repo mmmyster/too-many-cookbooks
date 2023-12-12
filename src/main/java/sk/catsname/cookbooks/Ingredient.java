@@ -53,12 +53,14 @@ public class Ingredient {
         this.unit = unit;
     }
 
-    public Ingredient(String name) {
+    public Ingredient(String name, float amount, String unit) {
         this.name = name;
+        this.amount = amount;
+        this.unit = unit;
     }
 
     @Override
     public String toString() {
-        return name;
+        return name + " " + amount + " " + unit;
     }
 }

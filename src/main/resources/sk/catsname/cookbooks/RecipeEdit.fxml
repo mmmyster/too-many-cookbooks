@@ -4,7 +4,6 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -33,11 +32,11 @@
                </font>
             </Label>
             <TextField fx:id="ingredientNameTextField" layoutX="86.0" layoutY="217.0" prefHeight="28.0" prefWidth="174.0" styleClass="input-field" />
-            <Spinner fx:id="amountSpinner" layoutX="285.0" layoutY="217.0" prefHeight="26.0" prefWidth="64.0" styleClass="input-field" />
-            <ComboBox fx:id="unitComboBox" layoutX="365.0" layoutY="218.0" prefHeight="26.0" prefWidth="59.0" />
+            <ComboBox fx:id="unitComboBox" layoutX="365.0" layoutY="218.0" prefHeight="26.0" prefWidth="80.0" />
             <Button fx:id="addIngredientButton" layoutX="471.0" layoutY="218.0" mnemonicParsing="false" onAction="#onAddIngredient" text="+" />
             <Label layoutX="87.0" layoutY="189.0" text="Add ingredient:" />
             <Label layoutX="87.0" layoutY="277.0" text="Instructions:" />
+            <TextField fx:id="amountTextField" layoutX="294.0" layoutY="217.0" prefHeight="26.0" prefWidth="47.0" styleClass="input-field" />
          </children>
       </AnchorPane>
    </content>

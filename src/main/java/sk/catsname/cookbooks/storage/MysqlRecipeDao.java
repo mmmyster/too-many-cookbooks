@@ -67,8 +67,8 @@ public class MysqlRecipeDao implements RecipeDao{
             );
 
             for (Ingredient ingredient : recipe.getIngredients()) { // saves the ingredients from the recipe
-                ingredient.setAmount(1337f); // TODO DELETE LATER
-                ingredient.setUnit("kg"); // TODO DELETE LATER
+                ingredient.setAmount(ingredient.getAmount());
+                ingredient.setUnit(ingredient.getUnit());
                 ingredientDao.save(ingredient, newRecipe);
             }
 
