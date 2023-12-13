@@ -30,7 +30,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `too_many_cookbooks`.`recipe` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
-  `image` BLOB NULL,
+  `image` MEDIUMBLOB NULL,
   `prep_time` FLOAT NULL,
   `servings` INT NULL,
   `instructions` TEXT NULL,
@@ -46,7 +46,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `too_many_cookbooks`.`cookbook` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
-  `image` BLOB NULL,
+  `image` MEDIUMBLOB NULL,
   `created_at` DATETIME NOT NULL,
   `updated_at` DATETIME NOT NULL,
   PRIMARY KEY (`id`))
