@@ -61,6 +61,6 @@ public class Ingredient {
 
     @Override
     public String toString() {
-        return name + " " + amount + " " + unit;
+        return amount + " " + unit + "  " + name;
     }
 }
