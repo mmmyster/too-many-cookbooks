@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface IngredientDao {
     List<Ingredient> getAllByRecipeId(Long id);
+    Ingredient getByName(String name);
     Ingredient getById(Long id) throws EntityNotFoundException;
     void saveRecipeIngredient(Ingredient ingredient, Recipe recipe);
     Ingredient saveIngredient(Ingredient ingredient);

@@ -1,5 +1,6 @@
 package sk.catsname.cookbooks.storage;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -65,6 +66,18 @@ public class MysqlIngredientDao implements IngredientDao {
     }
 
     @Override
+    public Ingredient getByName(String name) { // gets a single ingredient based on it's name
+        String sql = "SELECT id, name FROM ingredient WHERE name = \"" + name + "\"";
+
+        // tries to find the ingredient with the specified name
+        try { // if the ingredient with such name is found...
+            return jdbcTemplate.queryForObject(sql, ingredientRM()); // ...returns the found ingredient
+        } catch (EmptyResultDataAccessException e) { // if the result set is empty (no ingredient with such name is found)...
+            return null; // ...returns null, because there is no ingredient to return
+        }
+    }
+
+    @Override
     public void saveRecipeIngredient(Ingredient ingredient, Recipe recipe) {
         Objects.requireNonNull(ingredient, "Ingredient cannot be null");
         Objects.requireNonNull(ingredient.getAmount(), "Ingredient amount cannot be null");
@@ -100,8 +113,11 @@ public class MysqlIngredientDao implements IngredientDao {
     @Override
     public Ingredient saveIngredient(Ingredient ingredient) { // saves the ingredient into the "ingredient" table
         Objects.requireNonNull(ingredient, "Ingredient cannot be null");
+        Objects.requireNonNull(ingredient.getName(), "Ingredient name cannot be null");
 
-        if (ingredient.getId() == null) { // INSERT
+        Ingredient getNameIngredient = getByName(ingredient.getName());
+
+        if (getNameIngredient == null) { // INSERT (if no ingredient with such name exists)
             String query = "INSERT INTO ingredient (name) VALUES (?)";
 
             GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
@@ -118,8 +134,13 @@ public class MysqlIngredientDao implements IngredientDao {
                     ingredient.getAmount(),
                     ingredient.getUnit()
             );
-        } else { // UPDATE TODO
-            return null;
+        } else { // if an ingredient with such name exists...
+            return new Ingredient( // returns the original ingredient with the id of the one with the same name to be used further in saveRecipeIngredient()
+                    getNameIngredient.getId(),
+                    ingredient.getName(),
+                    ingredient.getAmount(),
+                    ingredient.getUnit()
+            );
         }
     }
 
