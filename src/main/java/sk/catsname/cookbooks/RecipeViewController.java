@@ -51,7 +51,7 @@ public class RecipeViewController {
             ingredients.add("• " + ingredient.toString());
         }
         ingredientsLabel.setText(String.valueOf(ingredients));
-        instructionsLabel.setLayoutY(instructionsLabel.getLayoutY() + (15 * savedRecipe.getIngredients().size()));
+        instructionsLabel.setLayoutY(instructionsLabel.getLayoutY() + (17 * savedRecipe.getIngredients().size()));
         instructionsLabel.setText(savedRecipe.getInstructions());
     }
 }
