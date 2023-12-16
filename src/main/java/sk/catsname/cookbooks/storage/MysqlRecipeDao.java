@@ -40,6 +40,14 @@ public class MysqlRecipeDao implements RecipeDao{
     }
 
     @Override
+    public List<Recipe> getAll() {
+        String sql = "SELECT id, name, image, prep_time, servings, instructions, created_at, updated_at " +
+                "FROM recipe";
+
+        return jdbcTemplate.query(sql, recipeRM());
+    }
+
+    @Override
     public List<Recipe> getAllByCookbookId(long id) {
         return null;
     }
