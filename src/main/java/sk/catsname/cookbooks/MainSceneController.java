@@ -22,9 +22,9 @@ public class MainSceneController {
 
     private void openRecipeEditWindow() {
         try {
-            RecipeEditController controller = new RecipeEditController();
+            CookbookEditController controller = new CookbookEditController();
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("RecipeEdit.fxml"));
+                    getClass().getResource("CookbookEdit.fxml"));
             loader.setController(controller);
             Parent parent = loader.load();
             Scene scene = new Scene(parent);

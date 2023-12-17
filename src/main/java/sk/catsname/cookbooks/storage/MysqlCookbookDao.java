@@ -14,6 +14,7 @@ import java.util.Objects;
 
 public class MysqlCookbookDao implements CookbookDao {
     private JdbcTemplate jdbcTemplate;
+    private RecipeDao recipeDao = DaoFactory.INSTANCE.getRecipeDao();
 
     public MysqlCookbookDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -26,7 +27,7 @@ public class MysqlCookbookDao implements CookbookDao {
                 Long id = rs.getLong("id");
                 String name = rs.getString("name");
                 Image image = KimKitsuragi.convertBlobToImage(rs.getBlob("image"));
-                List<Recipe> recipes = null; // TODO: load recipes
+                List<Recipe> recipes = recipeDao.getAllByCookbookId(id);
                 Timestamp createdAt = rs.getTimestamp("created_at");
                 Timestamp updatedAt = rs.getTimestamp("updated_at");
 
@@ -44,15 +45,12 @@ public class MysqlCookbookDao implements CookbookDao {
     }
 
     @Override
-    public Cookbook save(Cookbook cookbook) throws EntityNotFoundException {
+    public Cookbook saveCookbook(Cookbook cookbook) throws EntityNotFoundException {
         // sets the objects that require to be null to be null
         Objects.requireNonNull(cookbook, "Cookbook cannot be null");
-        Objects.requireNonNull(cookbook.getName(), "Cookbook name cannot be null");
-        Objects.requireNonNull(cookbook.getCreatedAt(), "Cookbook time of creation cannot be null");
-        Objects.requireNonNull(cookbook.getUpdatedAt(), "Cookbook time of last update cannot be null");
 
         if (cookbook.getId() == null) {
-            String query = "INSERT INTO recipe (name, image, created_at, updated_at) " +
+            String query = "INSERT INTO cookbook (name, image, created_at, updated_at) " +
                     "VALUES (?, ?, ?, ?)";
 
             GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
@@ -75,8 +73,56 @@ public class MysqlCookbookDao implements CookbookDao {
                     cookbook.getUpdatedAt()
             );
         } else {
-            return null; // TODO: UPDATING WHEN SAVING
+            return cookbook;
         }
+    }
+
+    private boolean cookbookRecipeCheck(long cID, long rID) { // method for checking if there already is a recipe in such cookbook in "recipe_cookbook" table
+        boolean contains = true;
+        for (Recipe recipe : recipeDao.getAllByCookbookId(cID)) {
+            if (recipe.getId() == rID) {
+                contains = false;
+                break;
+            }
+        }
+
+        return contains;
+    }
+
+    public void saveRecipeCookbook(Cookbook cookbook, Recipe recipe) throws EntityNotFoundException {
+        Objects.requireNonNull(cookbook, "Cookbook cannot be null");
+        Objects.requireNonNull(recipe, "Recipe cannot be null");
+
+        if (cookbookRecipeCheck(cookbook.getId(), recipe.getId())) {
+            String query = "INSERT INTO recipe_cookbook (recipe_id, cookbook_id) " +
+                    "VALUES (?, ?)";
+
+            GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+            jdbcTemplate.update(con -> {
+                PreparedStatement statement = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                statement.setLong(1, recipe.getId());
+                statement.setLong(2, cookbook.getId());
+                return statement;
+            }, keyHolder);
+        } else {
+            // TODO: UPDATING WHEN SAVING
+            // delete(cookbook.getId());
+        }
+    }
+
+    public Cookbook save(Cookbook cookbook) throws EntityNotFoundException {
+        Objects.requireNonNull(cookbook, "Cookbook cannot be null");
+        Objects.requireNonNull(cookbook.getName(), "Cookbook name cannot be null");
+        Objects.requireNonNull(cookbook.getCreatedAt(), "Cookbook time of creation cannot be null");
+        Objects.requireNonNull(cookbook.getUpdatedAt(), "Cookbook time of last update cannot be null");
+
+        Cookbook savedCookbook = saveCookbook(cookbook); // first a new cookbook is saved
+
+        for (Recipe recipe : cookbook.getRecipes()) { // then it is iterated through all recipes in the cookbook...
+            saveRecipeCookbook(savedCookbook, recipe); // ...and they are saved
+        }
+
+        return savedCookbook;
     }
 
     @Override

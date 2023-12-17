@@ -5,10 +5,12 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
 import sk.catsname.cookbooks.storage.CookbookDao;
 import sk.catsname.cookbooks.storage.DaoFactory;
 import sk.catsname.cookbooks.storage.RecipeDao;
@@ -29,7 +31,7 @@ public class CookbookEditController {
     private TextField cookbookNameTextField;
 
     @FXML
-    private ListView<String> recipeListView;
+    private ListView<Recipe> recipeListView;
 
     @FXML
     private TextField searchTextField;
@@ -40,7 +42,7 @@ public class CookbookEditController {
         cookbookModel = new CookbookFxModel();
     }
 
-    public ArrayList<String> createRecipeList() {
+    public ArrayList<String> createRecipeNameList() {
         ArrayList<String> recipesNames = new ArrayList<>();
         if (cookbookModel != null) {
             for (Recipe recipe : recipeDao.getAll()) {
@@ -54,8 +56,27 @@ public class CookbookEditController {
     void initialize() {
         cookbookNameTextField.textProperty().bindBidirectional(cookbookModel.nameProperty());
 
-        FilteredList<String> filteredData = new FilteredList<>(FXCollections.observableList(createRecipeList()), b -> true);
-        recipeListView.setItems(filteredData);
+        Callback<ListView<Recipe>, ListCell<Recipe>> cellFactory = new Callback<>() { // for displaying recipes as their names
+            @Override
+            public ListCell<Recipe> call(ListView<Recipe> param) {
+                return new ListCell<>() {
+                    @Override
+                    protected void updateItem(Recipe recipe, boolean empty) {
+                        super.updateItem(recipe, empty);
+
+                        if (empty || recipe == null) {
+                            setText(null);
+                        } else {
+                            setText(recipe.getName());
+                        }
+                    }
+                };
+            }
+        };
+
+        recipeListView.setCellFactory(cellFactory);
+
+        FilteredList<Recipe> filteredData = new FilteredList<>(FXCollections.observableList(recipeDao.getAll()), b -> true);
 
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(recipes -> {
@@ -65,17 +86,16 @@ public class CookbookEditController {
 
                 String searchKeyword = newValue.toLowerCase();
 
-                return recipes.toLowerCase().contains(searchKeyword);
+                return recipes.getName().toLowerCase().contains(searchKeyword);
             });
         });
 
         recipeListView.setItems(filteredData);
-
     }
 
     public void addRecipe(){
-        String recipe = recipeListView.getSelectionModel().getSelectedItem();
-//        cookbookModel.recipesModel().add(recipe);
+        Recipe recipe = recipeListView.getSelectionModel().getSelectedItem();
+        cookbookModel.recipesModel().add(recipe);
         System.out.println(recipe);
     }
 
@@ -85,9 +105,9 @@ public class CookbookEditController {
         CookbookDao cookbookDao = DaoFactory.INSTANCE.getCookbookDao();
         cookbook.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         cookbook.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-//        savedCookbook = cookbookDao.save(cookbook);
-//        Cookbook loadCookbook = cookbookDao.getById(savedCookbook.getId());
-//        System.out.println(loadCookbook);
+        Cookbook savedCookbook = cookbookDao.save(cookbook);
+        Cookbook loadCookbook = cookbookDao.getById(savedCookbook.getId());
+        System.out.println(loadCookbook);
 //
 //        try {
 //            CookbookViewController controller = new CookbookViewController();
