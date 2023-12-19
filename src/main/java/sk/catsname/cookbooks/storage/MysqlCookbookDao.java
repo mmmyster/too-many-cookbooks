@@ -73,7 +73,30 @@ public class MysqlCookbookDao implements CookbookDao {
                     cookbook.getUpdatedAt()
             );
         } else {
-            return cookbook;
+            String query = "UPDATE cookbook SET name=?, image=?, created_at=?, updated_at=? " +
+                    "WHERE id = " + cookbook.getId();
+
+            Timestamp updateTime = cookbook.getUpdatedAt();
+
+            int count = jdbcTemplate.update(query,
+                    cookbook.getName(),
+                    cookbook.getImage(),
+                    cookbook.getCreatedAt(),
+                    updateTime = new Timestamp(System.currentTimeMillis())
+            );
+
+            if (count == 0) {
+                throw new EntityNotFoundException("Recipe with id " + cookbook.getId() + " not found");
+            }
+
+            return new Cookbook(
+                    cookbook.getId(),
+                    cookbook.getName(),
+                    cookbook.getImage(),
+                    cookbook.getRecipes(),
+                    cookbook.getCreatedAt(),
+                    updateTime
+            );
         }
     }
 
@@ -104,9 +127,6 @@ public class MysqlCookbookDao implements CookbookDao {
                 statement.setLong(2, cookbook.getId());
                 return statement;
             }, keyHolder);
-        } else {
-            // TODO: UPDATING WHEN SAVING
-            // delete(cookbook.getId());
         }
     }
 
@@ -126,7 +146,26 @@ public class MysqlCookbookDao implements CookbookDao {
     }
 
     @Override
-    public void delete(Long id) throws EntityNotFoundException {
+    public void delete(Long id) {
+        deleteRecipeCookbook(id);
+        deleteCookbook(id);
+    }
 
+    @Override
+    public void deleteCookbook(Long id) throws EntityNotFoundException {
+        String query = "DELETE FROM cookbook WHERE id = " + id;
+
+        int count = jdbcTemplate.update(query);
+
+        if (count == 0) { throw new EntityNotFoundException("Cookbook with id " + id + " not found in cookbook table"); }
+    }
+
+    @Override
+    public void deleteRecipeCookbook(Long id) throws EntityNotFoundException {
+        String query = "DELETE FROM recipe_cookbook WHERE cookbook_id = " + id;
+
+        int count = jdbcTemplate.update(query);
+
+        if (count == 0) { throw new EntityNotFoundException("Cookbook with id " + id + " not found in recipe_cookbook table"); }
     }
 }

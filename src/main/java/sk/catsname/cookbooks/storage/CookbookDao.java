@@ -8,5 +8,7 @@ public interface CookbookDao {
     Cookbook saveCookbook(Cookbook cookbook) throws EntityNotFoundException;
     void saveRecipeCookbook(Cookbook cookbook, Recipe recipe) throws EntityNotFoundException;
     Cookbook save(Cookbook cookbook) throws EntityNotFoundException;
-    void delete(Long id) throws EntityNotFoundException;
+    void delete(Long id);
+    void deleteCookbook(Long id) throws EntityNotFoundException;
+    void deleteRecipeCookbook(Long id) throws EntityNotFoundException;
 }

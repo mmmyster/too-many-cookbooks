@@ -113,7 +113,10 @@ public class MysqlRecipeDao implements RecipeDao{
             return newRecipe;
         } else { // UPDATE
             String query = "UPDATE recipe SET name=?, image=?, prep_time=?, servings=?, instructions=?, created_at=?, updated_at=? " +
-                    "WHERE id=?";
+                    "WHERE id = " + recipe.getId();
+
+            Timestamp updateTime = recipe.getUpdatedAt();
+
             int count = jdbcTemplate.update(query,
                     recipe.getName(),
                     recipe.getImage(),
@@ -121,23 +124,63 @@ public class MysqlRecipeDao implements RecipeDao{
                     recipe.getServings(),
                     recipe.getInstructions(),
                     recipe.getCreatedAt(),
-                    recipe.getUpdatedAt()
+                    updateTime = new Timestamp(System.currentTimeMillis())
             );
 
             if (count == 0) {
                 throw new EntityNotFoundException("Recipe with id " + recipe.getId() + " not found");
             }
 
-            return  recipe;
+            return new Recipe(
+                    recipe.getId(),
+                    recipe.getName(),
+                    recipe.getImage(),
+                    recipe.getPreparationTime(),
+                    recipe.getServings(),
+                    recipe.getIngredients(),
+                    recipe.getInstructions(),
+                    recipe.getCreatedAt(),
+                    updateTime
+            );
         }
     }
 
     @Override
     public void delete(long id) throws EntityNotFoundException {
-        /*
-        String query = "DELETE FROM recipe WHERE id=?";
-        int count = jdbcTemplate.update(query, id);
-        if (count == 0) { throw new EntityNotFoundException("Recipe with id " + id + " not found"); }
-         */
+        // first we delete the recipe from ingredient_recipe table
+        deleteIngredientRecipe(id);
+
+        // then we delete the recipe from recipe_cookbook table
+        deleteRecipeCookbook(id);
+
+        // then we delete it from recipe table
+        deleteRecipe(id);
+    }
+
+    @Override
+    public void deleteIngredientRecipe(long id) throws EntityNotFoundException {
+        String query = "DELETE FROM ingredient_recipe WHERE recipe_id = " + id;
+
+        int count = jdbcTemplate.update(query);
+
+        if (count == 0) { throw new EntityNotFoundException("Recipe with id " + id + " not found in ingredient_recipe table"); }
+    }
+
+    @Override
+    public void deleteRecipe(long id) throws EntityNotFoundException {
+        String query = "DELETE FROM recipe WHERE id = " + id;
+
+        int count = jdbcTemplate.update(query);
+
+        if (count == 0) { throw new EntityNotFoundException("Recipe with id " + id + " not found in recipe table"); }
+    }
+
+    @Override
+    public void deleteRecipeCookbook(long id) throws EntityNotFoundException {
+        String query = "DELETE FROM recipe_cookbook WHERE recipe_id = " + id;
+
+        int count = jdbcTemplate.update(query);
+
+        if (count == 0) { throw new EntityNotFoundException("Recipe with id " + id + " not found in recipe_cookbook table"); }
     }
 }

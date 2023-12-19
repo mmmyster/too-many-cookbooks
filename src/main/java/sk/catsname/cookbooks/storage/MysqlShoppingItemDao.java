@@ -86,12 +86,21 @@ public class MysqlShoppingItemDao implements ShoppingItemDao {
                     shoppingItem.getAmount(),
                     shoppingItem.getUnit());
 
-            return shoppingItem;
+            return new ShoppingItem(
+                    shoppingItem.getId(),
+                    shoppingItem.getIngredientId(),
+                    shoppingItem.getAmount(),
+                    shoppingItem.getUnit()
+            );
         }
     }
 
     @Override
     public void delete(long id) throws EntityNotFoundException {
+        String sql = "DELETE FROM shopping_item WHERE id = " + id;
 
+        int count = jdbcTemplate.update(sql);
+
+        if (count == 0) { throw new EntityNotFoundException("Ingredient with id " + id + " not found in shopping_item"); }
     }
 }

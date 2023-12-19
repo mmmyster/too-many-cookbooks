@@ -151,7 +151,29 @@ public class MysqlIngredientDao implements IngredientDao {
     }
 
     @Override
-    public void delete(long id) throws EntityNotFoundException {
+    public void delete(long id) {
+        // first the ingredient is deleted from ingredient_recipe table
+        deleteIngredientRecipe(id);
 
+        // then it gets deleted from ingredient
+        deleteIngredient(id);
+    }
+
+    @Override
+    public void deleteIngredientRecipe(long id) throws EntityNotFoundException {
+        String sql = "DELETE FROM ingredient_recipe WHERE ingredient_id = " + id; // sql query for ingredient_recipe table
+
+        int count = jdbcTemplate.update(sql);
+
+        if (count == 0) { throw new EntityNotFoundException("Ingredient with id " + id + " not found in ingredient_recipe table"); }
+    }
+
+    @Override
+    public void deleteIngredient(long id) throws EntityNotFoundException {
+        String sql = "DELETE FROM ingredient WHERE id = " + id;
+
+        int count = jdbcTemplate.update(sql);
+
+        if (count == 0) { throw new EntityNotFoundException("Ingredient with id " + id + " not found in ingredient"); }
     }
 }

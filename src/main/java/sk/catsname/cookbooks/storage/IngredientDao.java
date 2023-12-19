@@ -12,5 +12,7 @@ public interface IngredientDao {
     void saveRecipeIngredient(Ingredient ingredient, Recipe recipe);
     Ingredient saveIngredient(Ingredient ingredient);
     void save(Ingredient ingredient, Recipe recipe) throws EntityNotFoundException;
-    void delete(long id) throws EntityNotFoundException;
+    void delete(long id);
+    void deleteIngredientRecipe(long id) throws EntityNotFoundException;
+    void deleteIngredient(long id) throws EntityNotFoundException;
 }
