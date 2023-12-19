@@ -1,13 +1,23 @@
 package sk.catsname.cookbooks;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.StringJoiner;
 
 public class RecipeViewController {
+
+    @FXML
+    private Button editRecipeButton;
 
     @FXML
     private ImageView recipeImageView;
@@ -54,4 +64,19 @@ public class RecipeViewController {
         instructionsLabel.setLayoutY(instructionsLabel.getLayoutY() + (17 * currentRecipe.getIngredients().size()));
         instructionsLabel.setText(currentRecipe.getInstructions());
     }
+
+    @FXML
+    void onEditRecipe(ActionEvent event) throws IOException { // TODO: edit book i had open
+        RecipeEditController controller = new RecipeEditController();
+        FXMLLoader fxmlLoader = new FXMLLoader(MainScene.class.getResource("RecipeEdit.fxml"));
+        fxmlLoader.setController(controller);
+        Parent parent = fxmlLoader.load();
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Edit recipe");
+        stage.setScene(scene);
+        stage.show();
+    }
+
 }

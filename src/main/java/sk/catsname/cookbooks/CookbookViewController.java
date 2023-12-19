@@ -1,15 +1,18 @@
 package sk.catsname.cookbooks;
 
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -19,6 +22,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class CookbookViewController {
+
+    @FXML
+    private Button editCookbookButton;
 
     @FXML
     private VBox vBox;
@@ -44,10 +50,10 @@ public class CookbookViewController {
             imageView.setSmooth(true);
             imageView.setPreserveRatio(true);
 
-            imageClipper(imageView);
+            imageMakeover(imageView);
 
             Label label = new Label(recipe.getName());
-            label.setPadding(new Insets(0,0,20, 0));
+            label.setPadding(new Insets(0, 0, 20, 0));
 
             imageView.setOnMouseClicked(openRecipe);
             label.setOnMouseClicked(openRecipe);
@@ -59,13 +65,27 @@ public class CookbookViewController {
             label.setUserData(recipe);
             imageView.setUserData(recipe);
 
-            vBox.getChildren().add(imageView);
-            vBox.getChildren().add(label);
+            HBox hBox = new HBox(label, imageView);
+            vBox.getChildren().add(hBox);
         }
 
     }
 
-    public void imageClipper(ImageView imageView) {
+    @FXML
+    void onEditCookbook(ActionEvent event) throws IOException { // TODO: edit book i had open
+        CookbookEditController controller = new CookbookEditController();
+        FXMLLoader fxmlLoader = new FXMLLoader(MainScene.class.getResource("CookbookEdit.fxml"));
+        fxmlLoader.setController(controller);
+        Parent parent = fxmlLoader.load();
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Edit cookbook");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void imageMakeover(ImageView imageView) {
         // set a clip to apply rounded border to the original image
         Rectangle clip = new Rectangle(imageView.getFitWidth(), 200);
         clip.setArcWidth(20);
