@@ -29,29 +29,29 @@ public class RecipeViewController {
 
     private RecipeFxModel recipeModel;
 
-    private Recipe savedRecipe;
+    private Recipe currentRecipe;
 
     public RecipeViewController() {
         recipeModel = new RecipeFxModel();
     }
 
-    public void setSavedRecipe(Recipe savedRecipe) {
-        this.savedRecipe = savedRecipe;
+    public void setCurrentRecipe(Recipe currentRecipe) {
+        this.currentRecipe = currentRecipe;
     }
 
     @FXML
     void initialize() {
-        Image image = savedRecipe.getImage();
+        Image image = currentRecipe.getImage();
         recipeImageView.setImage(image);
-        titleLabel.setText(savedRecipe.getName());
-        prepTimeLabel.setText(String.valueOf(savedRecipe.getPreparationTime()));
-        servingsLabel.setText(String.valueOf(savedRecipe.getServings()));
+        titleLabel.setText(currentRecipe.getName());
+        prepTimeLabel.setText(String.valueOf(currentRecipe.getPreparationTime()));
+        servingsLabel.setText(String.valueOf(currentRecipe.getServings()));
         StringJoiner ingredients = new StringJoiner("\n");
-        for (Ingredient ingredient : savedRecipe.getIngredients()) {
+        for (Ingredient ingredient : currentRecipe.getIngredients()) {
             ingredients.add("• " + ingredient.toString());
         }
         ingredientsLabel.setText(String.valueOf(ingredients));
-        instructionsLabel.setLayoutY(instructionsLabel.getLayoutY() + (17 * savedRecipe.getIngredients().size()));
-        instructionsLabel.setText(savedRecipe.getInstructions());
+        instructionsLabel.setLayoutY(instructionsLabel.getLayoutY() + (17 * currentRecipe.getIngredients().size()));
+        instructionsLabel.setText(currentRecipe.getInstructions());
     }
 }

@@ -121,7 +121,7 @@ public class RecipeEditController {
 
         try {
             RecipeViewController controller = new RecipeViewController();
-            controller.setSavedRecipe(loadedRecipe);
+            controller.setCurrentRecipe(loadedRecipe);
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("RecipeView.fxml"));
             loader.setController(controller);
