@@ -2,28 +2,30 @@ package sk.catsname.cookbooks;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import sk.catsname.cookbooks.storage.DaoFactory;
 import sk.catsname.cookbooks.storage.RecipeDao;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 public class RecipeEditController {
+
     RecipeDao recipeDao = DaoFactory.INSTANCE.getRecipeDao();
+
     Recipe savedRecipe;
 
     @FXML
@@ -39,7 +41,16 @@ public class RecipeEditController {
     private TextField amountTextField;
 
     @FXML
+    private Button deleteIngredientButton;
+
+    @FXML
+    private Button deleteRecipeButton;
+
+    @FXML
     private TextField ingredientNameTextField;
+
+    @FXML
+    private ListView<Ingredient> ingredientsListView;
 
     @FXML
     private TextArea instructionsTextArea;
@@ -49,6 +60,9 @@ public class RecipeEditController {
 
     @FXML
     private TextField recipeNameTextField;
+
+    @FXML
+    private TextField searchTextField;
 
     @FXML
     private TextField servingsTextField;
@@ -62,6 +76,16 @@ public class RecipeEditController {
         recipeModel = new RecipeFxModel();
     }
 
+    public ArrayList<String> createIngredientsNameList() {
+        ArrayList<String> ingredientsNames = new ArrayList<>();
+        if (recipeModel != null) {
+            for (Ingredient ingredient : recipeModel.getIngredients()) {
+                ingredientsNames.add(ingredient.getName());
+            }
+        }
+        return ingredientsNames;
+    }
+
     @FXML
     public void initialize() {
         recipeNameTextField.textProperty().bindBidirectional(recipeModel.nameProperty());
@@ -71,6 +95,42 @@ public class RecipeEditController {
         ObservableList<String> units = FXCollections.observableArrayList("ml", "l", "dl", "tsp", "tbsp", "cup", "mg", "g", "kg");
         unitComboBox.getItems().clear();
         unitComboBox.setItems(units);
+
+        Callback<ListView<Ingredient>, ListCell<Ingredient>> cellFactory = new Callback<>() { // for displaying ingredients as their names
+            @Override
+            public ListCell<Ingredient> call(ListView<Ingredient> param) {
+                return new ListCell<>() {
+                    @Override
+                    protected void updateItem(Ingredient ingredient, boolean empty) {
+                        super.updateItem(ingredient, empty);
+
+                        if (empty || ingredient == null) {
+                            setText(null);
+                        } else {
+                            setText(ingredient.getName());
+                        }
+                    }
+                };
+            }
+        };
+
+        ingredientsListView.setCellFactory(cellFactory);
+
+        FilteredList<Ingredient> filteredData = new FilteredList<>(FXCollections.observableList(recipeModel.getIngredients()), b -> true);
+
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(ingredients -> {
+                if (newValue.isEmpty() || newValue.isBlank() || newValue == null) {
+                    return true;
+                }
+
+                String searchKeyword = newValue.toLowerCase();
+
+                return ingredients.getName().toLowerCase().contains(searchKeyword);
+            });
+        });
+
+        ingredientsListView.setItems(filteredData);
     }
 
     @FXML
@@ -110,6 +170,12 @@ public class RecipeEditController {
     }
 
     @FXML
+    void onDeleteIngredient(ActionEvent event) {
+        Ingredient ingredient = ingredientsListView.getSelectionModel().getSelectedItem();
+        System.out.println(ingredient); // TODO: add ability delete ingredient
+    }
+
+    @FXML
     void onAddRecipe(ActionEvent event) {
         Recipe recipe = recipeModel.getRecipe();
         RecipeDao recipeDao = DaoFactory.INSTANCE.getRecipeDao();
@@ -135,5 +201,10 @@ public class RecipeEditController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @FXML
+    void onDeleteRecipe(ActionEvent event) {
+        // TODO: add ability to delete recipe
     }
 }

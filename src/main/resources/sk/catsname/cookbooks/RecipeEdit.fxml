@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -14,7 +15,7 @@
    <content>
       <AnchorPane prefHeight="459.0" prefWidth="583.0" style="-fx-background-color: #fff;" stylesheets="@style.css">
          <children>
-            <HBox layoutX="85.0" layoutY="305.0" prefHeight="100.0" prefWidth="413.0" styleClass="input-field">
+            <HBox layoutX="85.0" layoutY="423.0" prefHeight="100.0" prefWidth="413.0" styleClass="input-field">
                <children>
                   <TextArea fx:id="instructionsTextArea" maxHeight="-Infinity" prefHeight="96.0" prefWidth="483.0" wrapText="true" />
                </children>
@@ -25,19 +26,23 @@
             <Label layoutX="86.0" layoutY="137.0" text="Preparation time:" />
             <TextField fx:id="servingsTextField" layoutX="357.0" layoutY="131.0" prefHeight="26.0" prefWidth="47.0" styleClass="input-field" />
             <Label layoutX="292.0" layoutY="136.0" text="Servings:" />
-            <Button fx:id="addRecipeButton" layoutX="454.0" layoutY="421.0" mnemonicParsing="false" onAction="#onAddRecipe" text="Save" />
+            <Button fx:id="addRecipeButton" layoutX="87.0" layoutY="539.0" mnemonicParsing="false" onAction="#onAddRecipe" text="Save" />
             <Label layoutX="45.0" layoutY="22.0" text="New recipe" textFill="#d5c729">
                <font>
                   <Font name="Full-House20" size="25.0" />
                </font>
             </Label>
-            <TextField fx:id="ingredientNameTextField" layoutX="86.0" layoutY="217.0" prefHeight="28.0" prefWidth="174.0" styleClass="input-field" />
-            <ComboBox fx:id="unitComboBox" layoutX="365.0" layoutY="218.0" prefHeight="26.0" prefWidth="80.0" />
-            <Button fx:id="addIngredientButton" layoutX="471.0" layoutY="218.0" mnemonicParsing="false" onAction="#onAddIngredient" text="+" />
-            <Label layoutX="87.0" layoutY="189.0" text="Add ingredient:" />
-            <Label layoutX="87.0" layoutY="277.0" text="Instructions:" />
-            <TextField fx:id="amountTextField" layoutX="294.0" layoutY="217.0" prefHeight="26.0" prefWidth="47.0" styleClass="input-field" />
+            <TextField fx:id="ingredientNameTextField" layoutX="366.0" layoutY="261.0" prefHeight="28.0" prefWidth="153.0" styleClass="input-field" />
+            <ComboBox fx:id="unitComboBox" layoutX="364.0" layoutY="308.0" prefHeight="26.0" prefWidth="80.0" />
+            <Button fx:id="addIngredientButton" layoutX="364.0" layoutY="344.0" mnemonicParsing="false" onAction="#onAddIngredient" text="+" />
+            <Label layoutX="87.0" layoutY="189.0" text="Ingredients:" />
+            <Label layoutX="87.0" layoutY="395.0" text="Instructions:" />
+            <TextField fx:id="amountTextField" layoutX="475.0" layoutY="307.0" prefHeight="26.0" prefWidth="47.0" styleClass="input-field" />
             <Button fx:id="addImageButton" layoutX="366.0" layoutY="76.0" mnemonicParsing="false" onAction="#onAddImage" text="Add image" />
+            <Button fx:id="deleteRecipeButton" layoutX="444.0" layoutY="537.0" mnemonicParsing="false" onAction="#onDeleteRecipe" text="Delete" />
+            <TextField fx:id="searchTextField" layoutX="86.0" layoutY="217.0" prefHeight="27.0" prefWidth="256.0" styleClass="input-field" />
+            <ListView fx:id="ingredientsListView" layoutX="86.0" layoutY="261.0" onMouseClicked="#addRecipe" prefHeight="119.0" prefWidth="256.0" />
+            <Label layoutX="366.0" layoutY="223.0" text="Add ingredient:" />
          </children>
       </AnchorPane>
    </content>
