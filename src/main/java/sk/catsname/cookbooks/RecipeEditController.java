@@ -93,7 +93,7 @@ public class RecipeEditController {
         File file = fileChooser.showOpenDialog(null);
 
         if (file != null) {
-            recipeModel.setImage(new Image(file.toURI().toString()));
+            recipeModel.setImage(new Image(file.toURI().toString(), 500, 500, true, true));
             System.out.println("Vybratý súbor: " + file); // TODO: test output, remove later
         }
     }

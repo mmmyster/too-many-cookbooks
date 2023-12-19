@@ -34,6 +34,9 @@ public class CookbookEditController {
     private Button addImageButton;
 
     @FXML
+    private Button addRecipeButton;
+
+    @FXML
     private TextField cookbookNameTextField;
 
     @FXML
@@ -99,7 +102,7 @@ public class CookbookEditController {
         recipeListView.setItems(filteredData);
     }
 
-    public void addRecipe(){
+    public void addRecipe() {
         Recipe recipe = recipeListView.getSelectionModel().getSelectedItem();
         cookbookModel.recipesModel().add(recipe);
         System.out.println(recipe);
@@ -153,9 +156,23 @@ public class CookbookEditController {
         File file = fileChooser.showOpenDialog(null);
 
         if (file != null) {
-            cookbookModel.setImage(new Image(file.toURI().toString()));
+            cookbookModel.setImage(new Image(file.toURI().toString(), 500, 500, true, true));
             System.out.println("Vybratý súbor: " + file); // TODO: test output, remove later
         }
+    }
+
+    @FXML
+    void onAddRecipe(ActionEvent event) throws IOException {
+        RecipeEditController controller = new RecipeEditController();
+        FXMLLoader fxmlLoader = new FXMLLoader(MainScene.class.getResource("RecipeEdit.fxml"));
+        fxmlLoader.setController(controller);
+        Parent parent = fxmlLoader.load();
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Edit recipe");
+        stage.setScene(scene);
+        stage.show();
     }
 
 }
