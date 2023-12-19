@@ -26,7 +26,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class CookbookEditController {
+
     RecipeDao recipeDao = DaoFactory.INSTANCE.getRecipeDao();
+
     @FXML
     private Button addCookbookButton;
 
@@ -34,10 +36,13 @@ public class CookbookEditController {
     private Button addImageButton;
 
     @FXML
-    private Button addRecipeButton;
+    private Button newRecipeButton;
 
     @FXML
     private TextField cookbookNameTextField;
+
+    @FXML
+    private Button deleteCookbookButton;
 
     @FXML
     private ListView<Recipe> recipeListView;
@@ -54,7 +59,7 @@ public class CookbookEditController {
     public ArrayList<String> createRecipeNameList() {
         ArrayList<String> recipesNames = new ArrayList<>();
         if (cookbookModel != null) {
-            for (Recipe recipe : recipeDao.getAll()) {
+            for (Recipe recipe : cookbookModel.getRecipes()) {
                 recipesNames.add(recipe.getName());
             }
         }
@@ -85,7 +90,7 @@ public class CookbookEditController {
 
         recipeListView.setCellFactory(cellFactory);
 
-        FilteredList<Recipe> filteredData = new FilteredList<>(FXCollections.observableList(recipeDao.getAll()), b -> true);
+        FilteredList<Recipe> filteredData = new FilteredList<>(FXCollections.observableList(cookbookModel.getRecipes()), b -> true);
 
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(recipes -> {
@@ -100,12 +105,6 @@ public class CookbookEditController {
         });
 
         recipeListView.setItems(filteredData);
-    }
-
-    public void addRecipe() {
-        Recipe recipe = recipeListView.getSelectionModel().getSelectedItem();
-        cookbookModel.recipesModel().add(recipe);
-        System.out.println(recipe);
     }
 
     @FXML
@@ -162,17 +161,22 @@ public class CookbookEditController {
     }
 
     @FXML
-    void onAddRecipe(ActionEvent event) throws IOException {
-        RecipeEditController controller = new RecipeEditController();
-        FXMLLoader fxmlLoader = new FXMLLoader(MainScene.class.getResource("RecipeEdit.fxml"));
+    void onNewRecipe(ActionEvent event) throws IOException {
+        RecipePickerController controller = new RecipePickerController();
+        FXMLLoader fxmlLoader = new FXMLLoader(MainScene.class.getResource("RecipePicker.fxml"));
         fxmlLoader.setController(controller);
         Parent parent = fxmlLoader.load();
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);
-        stage.setTitle("Edit recipe");
+        stage.setTitle("Pick recipes");
         stage.setScene(scene);
         stage.show();
+    }
+
+    @FXML
+    void onDeleteCookbook(ActionEvent event) {
+        // TODO: add ability delete cookbook
     }
 
 }
