@@ -37,6 +37,14 @@ public class MysqlCookbookDao implements CookbookDao {
     }
 
     @Override
+    public List<Cookbook> getAll() {
+        String sql = "SELECT id, name, image, created_at, updated_at " +
+                "FROM cookbook";
+
+        return jdbcTemplate.query(sql, cookbookRM());
+    }
+
+    @Override
     public Cookbook getById(Long id) throws EntityNotFoundException { // gets the cookbook based on it's recipe
         String sql = "SELECT id, name, image, created_at, updated_at " +
                 "FROM cookbook " +
@@ -157,7 +165,9 @@ public class MysqlCookbookDao implements CookbookDao {
 
         int count = jdbcTemplate.update(query);
 
-        if (count == 0) { throw new EntityNotFoundException("Cookbook with id " + id + " not found in cookbook table"); }
+        if (count == 0) {
+            throw new EntityNotFoundException("Cookbook with id " + id + " not found in cookbook table");
+        }
     }
 
     @Override
@@ -166,6 +176,8 @@ public class MysqlCookbookDao implements CookbookDao {
 
         int count = jdbcTemplate.update(query);
 
-        if (count == 0) { throw new EntityNotFoundException("Cookbook with id " + id + " not found in recipe_cookbook table"); }
+        if (count == 0) {
+            throw new EntityNotFoundException("Cookbook with id " + id + " not found in recipe_cookbook table");
+        }
     }
 }
