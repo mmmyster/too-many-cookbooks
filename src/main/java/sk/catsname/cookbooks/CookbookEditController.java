@@ -4,18 +4,24 @@ import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import sk.catsname.cookbooks.storage.CookbookDao;
 import sk.catsname.cookbooks.storage.DaoFactory;
 import sk.catsname.cookbooks.storage.RecipeDao;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -108,23 +114,23 @@ public class CookbookEditController {
         Cookbook savedCookbook = cookbookDao.save(cookbook);
         Cookbook loadCookbook = cookbookDao.getById(savedCookbook.getId());
         System.out.println(loadCookbook);
-//
-//        try {
-//            CookbookViewController controller = new CookbookViewController();
-//            controller.setSavedCookbook(loadCookbook);
-//            FXMLLoader loader = new FXMLLoader(
-//                    getClass().getResource("CookbookView.fxml"));
-//            loader.setController(controller);
-//            Parent parent = loader.load();
-//            Scene scene = new Scene(parent);
-//            Stage stage = new Stage();
-//            stage.setScene(scene);
-//            stage.initModality(Modality.APPLICATION_MODAL);
-//            stage.setTitle("Cookbook");
-//            stage.show();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+
+        try {
+            CookbookViewController controller = new CookbookViewController();
+            controller.setSavedCookbook(loadCookbook);
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("CookbookView.fxml"));
+            loader.setController(controller);
+            Parent parent = loader.load();
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Cookbook");
+            stage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
