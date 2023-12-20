@@ -69,7 +69,10 @@ public class CookbookEditController {
 
     @FXML
     void initialize() {
-        cookbookModel = new CookbookFxModel(currentCookbook);
+        if (currentCookbook != null) {
+            cookbookModel = new CookbookFxModel(currentCookbook);
+        }
+
         cookbookNameTextField.textProperty().bindBidirectional(cookbookModel.nameProperty());
 
         Callback<ListView<Recipe>, ListCell<Recipe>> cellFactory = new Callback<>() { // for displaying recipes as their names
