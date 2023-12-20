@@ -103,7 +103,6 @@ public class MainSceneController {
     EventHandler<MouseEvent> openCookbook = (event) -> {
         try {
             CookbookViewController controller = new CookbookViewController();
-            // TODO: add requested cookbook
             Node clickedNode = (Node) event.getSource(); // gets the currently clicked node
             controller.setCurrentCookbook((Cookbook) clickedNode.getUserData()); // sets the current cookbook based on the user data of the clicked node
             FXMLLoader loader = new FXMLLoader(

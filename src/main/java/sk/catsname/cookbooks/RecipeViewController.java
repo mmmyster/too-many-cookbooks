@@ -66,7 +66,7 @@ public class RecipeViewController {
     }
 
     @FXML
-    void onEditRecipe(ActionEvent event) throws IOException { // TODO: edit book i had open
+    void onEditRecipe(ActionEvent event) throws IOException {
         RecipeEditController controller = new RecipeEditController();
         controller.editedRecipe = currentRecipe;
         FXMLLoader fxmlLoader = new FXMLLoader(MainScene.class.getResource("RecipeEdit.fxml"));

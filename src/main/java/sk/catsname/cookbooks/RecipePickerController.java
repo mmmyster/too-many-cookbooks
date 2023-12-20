@@ -93,8 +93,7 @@ public class RecipePickerController {
     void onAddRecipe(ActionEvent event) {
         Recipe recipe = allRecipesListView.getSelectionModel().getSelectedItem();
         cookbookModel.recipesModel().add(recipe);
-        System.out.println(recipe); // TODO: add recipes to database/pass to cookbook edit controller
-
+        System.out.println(recipe);
     }
 
     @FXML

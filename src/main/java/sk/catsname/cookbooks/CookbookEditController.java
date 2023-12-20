@@ -158,7 +158,6 @@ public class CookbookEditController {
 
         if (file != null) {
             cookbookModel.setImage(new Image(file.toURI().toString(), 500, 500, true, true));
-            System.out.println("Vybratý súbor: " + file); // TODO: test output, remove later
         }
     }
 

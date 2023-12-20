@@ -75,7 +75,7 @@ public class CookbookViewController {
     }
 
     @FXML
-    void onEditCookbook(ActionEvent event) throws IOException { // TODO: edit book i had open
+    void onEditCookbook(ActionEvent event) throws IOException {
         CookbookEditController controller = new CookbookEditController();
         controller.currentCookbook = currentCookbook;
         FXMLLoader fxmlLoader = new FXMLLoader(MainScene.class.getResource("CookbookEdit.fxml"));
