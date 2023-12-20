@@ -35,7 +35,7 @@ public class RecipePickerController {
     @FXML
     private TextField searchTextField;
 
-    private CookbookFxModel cookbookModel;
+    public CookbookFxModel cookbookModel;
 
     public RecipePickerController() {
         cookbookModel = new CookbookFxModel();
@@ -94,6 +94,7 @@ public class RecipePickerController {
         Recipe recipe = allRecipesListView.getSelectionModel().getSelectedItem();
         cookbookModel.recipesModel().add(recipe);
         System.out.println(recipe); // TODO: add recipes to database/pass to cookbook edit controller
+
     }
 
     @FXML

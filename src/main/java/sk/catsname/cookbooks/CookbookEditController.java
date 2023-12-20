@@ -51,6 +51,7 @@ public class CookbookEditController {
     private TextField searchTextField;
 
     private CookbookFxModel cookbookModel;
+    public Cookbook currentCookbook;
 
     public CookbookEditController() {
         cookbookModel = new CookbookFxModel();
@@ -68,6 +69,7 @@ public class CookbookEditController {
 
     @FXML
     void initialize() {
+        cookbookModel = new CookbookFxModel(currentCookbook);
         cookbookNameTextField.textProperty().bindBidirectional(cookbookModel.nameProperty());
 
         Callback<ListView<Recipe>, ListCell<Recipe>> cellFactory = new Callback<>() { // for displaying recipes as their names
@@ -119,7 +121,7 @@ public class CookbookEditController {
 
         try {
             CookbookViewController controller = new CookbookViewController();
-            controller.setSavedCookbook(loadCookbook);
+            controller.setCurrentCookbook(loadCookbook);
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("CookbookView.fxml"));
             loader.setController(controller);
@@ -163,6 +165,7 @@ public class CookbookEditController {
     @FXML
     void onNewRecipe(ActionEvent event) throws IOException {
         RecipePickerController controller = new RecipePickerController();
+        controller.cookbookModel = this.cookbookModel;
         FXMLLoader fxmlLoader = new FXMLLoader(MainScene.class.getResource("RecipePicker.fxml"));
         fxmlLoader.setController(controller);
         Parent parent = fxmlLoader.load();
@@ -177,6 +180,8 @@ public class CookbookEditController {
     @FXML
     void onDeleteCookbook(ActionEvent event) {
         // TODO: add ability delete cookbook
+        CookbookDao cookbookDao = DaoFactory.INSTANCE.getCookbookDao();
+        cookbookDao.delete(cookbookModel.getId());
     }
 
 }

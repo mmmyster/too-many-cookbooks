@@ -144,6 +144,8 @@ public class MysqlCookbookDao implements CookbookDao {
         Objects.requireNonNull(cookbook.getCreatedAt(), "Cookbook time of creation cannot be null");
         Objects.requireNonNull(cookbook.getUpdatedAt(), "Cookbook time of last update cannot be null");
 
+        if (cookbook.getImage() == null) { cookbook.setImage(new Image("sk/catsname/cookbooks/no_image_sad.jpg")); }
+
         Cookbook savedCookbook = saveCookbook(cookbook); // first a new cookbook is saved
 
         for (Recipe recipe : cookbook.getRecipes()) { // then it is iterated through all recipes in the cookbook...

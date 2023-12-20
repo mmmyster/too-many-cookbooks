@@ -25,11 +25,12 @@ public class RecipeFxModel {
     }
 
     public RecipeFxModel(Recipe recipe) {
+        setId(recipe.getId());
         setName(recipe.getName());
         setImage(recipe.getImage());
         setPreparationTime(recipe.getPreparationTime());
         setServings(recipe.getServings());
-        ingredients = FXCollections.observableArrayList(getIngredients());
+        ingredients = FXCollections.observableArrayList(recipe.getIngredients());
         setInstructions(recipe.getInstructions());
         setCreatedAt(recipe.getCreatedAt());
         setUpdatedAt(recipe.getUpdatedAt());
@@ -133,6 +134,22 @@ public class RecipeFxModel {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setPreparationTime(String preparationTime) {
+        this.preparationTime.set(preparationTime);
+    }
+
+    public void setServings(String servings) {
+        this.servings.set(servings);
+    }
+
+    public void setIngredients(ObservableList<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public ObjectProperty<Timestamp> updatedAtProperty() {
+        return updatedAt;
     }
 
     public Recipe getRecipe() {

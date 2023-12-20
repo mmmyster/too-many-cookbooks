@@ -5,10 +5,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Cursor;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.SnapshotParameters;
+import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
@@ -58,6 +55,10 @@ public class MainSceneController {
             label.setCursor(Cursor.HAND);
             imageView.setCursor(Cursor.HAND);
 
+            // sets the user data for the image and the label to be the cookbook they symbolize
+            label.setUserData(cookbook);
+            imageView.setUserData(cookbook);
+
             vBox.getChildren().add(imageView);
             vBox.getChildren().add(label);
         }
@@ -103,6 +104,8 @@ public class MainSceneController {
         try {
             CookbookViewController controller = new CookbookViewController();
             // TODO: add requested cookbook
+            Node clickedNode = (Node) event.getSource(); // gets the currently clicked node
+            controller.setCurrentCookbook((Cookbook) clickedNode.getUserData()); // sets the current cookbook based on the user data of the clicked node
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("CookbookView.fxml"));
             loader.setController(controller);

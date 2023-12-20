@@ -18,6 +18,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sk.catsname.cookbooks.storage.DaoFactory;
+import sk.catsname.cookbooks.storage.IngredientDao;
 
 import java.io.IOException;
 
@@ -31,20 +33,21 @@ public class CookbookViewController {
 
     private CookbookFxModel cookbookModel;
 
-    private Cookbook savedCookbook;
+    private Cookbook currentCookbook;
 
     public CookbookViewController() {
         cookbookModel = new CookbookFxModel();
     }
 
-    public void setSavedCookbook(Cookbook savedCookbook) {
-        this.savedCookbook = savedCookbook;
+    public void setCurrentCookbook(Cookbook currentCookbook) {
+        this.currentCookbook = currentCookbook;
     }
 
     @FXML
     void initialize() {
+        IngredientDao ingredientDao = DaoFactory.INSTANCE.getIngredientDao();
 
-        for (Recipe recipe : savedCookbook.getRecipes()) {
+        for (Recipe recipe : currentCookbook.getRecipes()) {
             ImageView imageView = new ImageView(recipe.getImage());
             imageView.setFitWidth(300);
             imageView.setSmooth(true);
@@ -74,6 +77,7 @@ public class CookbookViewController {
     @FXML
     void onEditCookbook(ActionEvent event) throws IOException { // TODO: edit book i had open
         CookbookEditController controller = new CookbookEditController();
+        controller.currentCookbook = currentCookbook;
         FXMLLoader fxmlLoader = new FXMLLoader(MainScene.class.getResource("CookbookEdit.fxml"));
         fxmlLoader.setController(controller);
         Parent parent = fxmlLoader.load();

@@ -24,7 +24,7 @@ public class CookbookFxModel {
     public CookbookFxModel(Cookbook cookbook) {
         setName(cookbook.getName());
         setImage(cookbook.getImage());
-        recipes = FXCollections.observableArrayList(getRecipes());
+        recipes = FXCollections.observableArrayList(cookbook.getRecipes());
         setCreatedAt(cookbook.getCreatedAt());
         setUpdatedAt(cookbook.getUpdatedAt());
     }
