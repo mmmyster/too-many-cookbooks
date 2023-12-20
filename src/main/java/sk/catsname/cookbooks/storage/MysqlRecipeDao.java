@@ -9,6 +9,7 @@ import sk.catsname.cookbooks.Recipe;
 
 import javafx.scene.image.Image;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -104,10 +105,10 @@ public class MysqlRecipeDao implements RecipeDao{
                     recipe.getUpdatedAt()
             );
 
-            for (Ingredient ingredient : recipe.getIngredients()) { // saves the ingredients from the recipe
-                ingredient.setAmount(ingredient.getAmount());
-                ingredient.setUnit(ingredient.getUnit());
-                ingredientDao.save(ingredient, newRecipe);
+            if (recipe.getIngredients() != null) {
+                for (Ingredient ingredient : recipe.getIngredients()) { // saves the ingredients from the recipe
+                    ingredientDao.save(ingredient, newRecipe);
+                }
             }
 
             return newRecipe;
@@ -129,6 +130,33 @@ public class MysqlRecipeDao implements RecipeDao{
 
             if (count == 0) {
                 throw new EntityNotFoundException("Recipe with id " + recipe.getId() + " not found");
+            }
+
+            for (Ingredient ingredient : recipe.getIngredients()) { // updating the ingredients
+                ingredientDao.save(ingredient, recipe);
+            }
+
+            List<Ingredient> ingredientsToDelete = new ArrayList<>();
+
+            for (Ingredient ingredient : ingredientDao.getAllByRecipeId(recipe.getId())) {
+                boolean found = false;
+                for (Ingredient recipeIngredient : recipe.getIngredients()) {
+                    if (ingredient.getName().equals(recipeIngredient.getName())) {
+                        found = true;
+                        break; // no need to check further, as the ingredient is already in the recipe
+                    }
+                }
+
+                if (!found) {
+                    ingredientsToDelete.add(ingredient);
+                }
+            }
+
+            // delete the ingredients
+            for (Ingredient ingredient : ingredientsToDelete) {
+                try {
+                    ingredientDao.deleteIngredientRecipe(ingredient.getId());
+                } catch (EntityNotFoundException e) {} // no need to handle the exception
             }
 
             return new Recipe(

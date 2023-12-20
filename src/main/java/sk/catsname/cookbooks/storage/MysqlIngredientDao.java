@@ -7,10 +7,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import sk.catsname.cookbooks.Ingredient;
 import sk.catsname.cookbooks.Recipe;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -77,6 +75,22 @@ public class MysqlIngredientDao implements IngredientDao {
         }
     }
 
+    /*
+    @Override
+    public Ingredient checkRecipeIngredient(Recipe recipe, Ingredient ingredient) {
+        String sql = "SELECT ir.ingredient_id, i.name, ir.amount, ir.unit " +
+                "FROM ingredient i " +
+                "LEFT JOIN ingredient_recipe ir ON i.id = ir.ingredient_id " +
+                "WHERE ir.recipe_id = " + recipe.getId() + " AND ir.ingredient_id = " + ingredient.getId();
+
+        try {
+            return jdbcTemplate.queryForObject(sql, ingredientRecipeRM());
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+     */
+
     @Override
     public void saveRecipeIngredient(Ingredient ingredient, Recipe recipe) {
         Objects.requireNonNull(ingredient, "Ingredient cannot be null");
@@ -84,7 +98,7 @@ public class MysqlIngredientDao implements IngredientDao {
         Objects.requireNonNull(ingredient.getUnit(), "Ingredient unit cannot be null");
 
         if (!getAllByRecipeId(recipe.getId()).contains(ingredient)) { // INSERT
-            String query = "INSERT INTO ingredient_recipe (ingredient_id, recipe_id,amount, unit) VALUES (?, ?, ?, ?)";
+            String query = "INSERT INTO ingredient_recipe (ingredient_id, recipe_id, amount, unit) VALUES (?, ?, ?, ?)";
 
             GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(con -> {
@@ -95,19 +109,9 @@ public class MysqlIngredientDao implements IngredientDao {
                 statement.setString(4, ingredient.getUnit());
                 return statement;
             }, keyHolder);
-            //Long id = keyHolder.getKey().longValue();
-
-            /*
-            return new Ingredient(
-                    id,
-                    ingredient.getName(),
-                    ingredient.getAmount(),
-                    ingredient.getUnit()
-            );
-             */
-        } else { // UPDATE TODO
-
-        }
+        }// else {
+            //deleteIngredientRecipe(ingredient.getId());
+        //}
     }
 
     @Override
@@ -146,8 +150,28 @@ public class MysqlIngredientDao implements IngredientDao {
 
     @Override
     public void save(Ingredient ingredient, Recipe recipe) throws EntityNotFoundException { // saves the ingredient
-        savedIngredient = saveIngredient(ingredient); // first it saves a new ingredient into the ingredient table
-        saveRecipeIngredient(savedIngredient, recipe); // after that it saves the ingredient into ingredient_recipe table
+
+        if (ingredient.getId() == null) {
+            savedIngredient = saveIngredient(ingredient); // first it saves a new ingredient into the ingredient table
+            saveRecipeIngredient(savedIngredient, recipe); // after that it saves the ingredient into ingredient_recipe table
+        } else {
+            updateIngredientRecipe(ingredient, recipe);
+        }
+    }
+
+    @Override
+    public void updateIngredientRecipe(Ingredient ingredient, Recipe recipe) {
+        String query = "UPDATE ingredient_recipe SET amount=?, unit=? " +
+                "WHERE ingredient_id = " + ingredient.getId();
+
+        int count = jdbcTemplate.update(query,
+                ingredient.getAmount(),
+                ingredient.getUnit()
+        );
+
+        if (count == 0) {
+            throw new EntityNotFoundException("Ingredient with id " + ingredient.getId() + " not found");
+        }
     }
 
     @Override
