@@ -53,7 +53,7 @@ public class MysqlCookbookDao implements CookbookDao {
     }
 
     @Override
-    public Cookbook saveCookbook(Cookbook cookbook) throws EntityNotFoundException {
+    public Cookbook saveCookbook(Cookbook cookbook) throws EntityNotFoundException, SQLException {
         // sets the objects that require to be null to be null
         Objects.requireNonNull(cookbook, "Cookbook cannot be null");
 
@@ -88,7 +88,7 @@ public class MysqlCookbookDao implements CookbookDao {
 
             int count = jdbcTemplate.update(query,
                     cookbook.getName(),
-                    cookbook.getImage(),
+                    KimKitsuragi.convertImageToBlob(cookbook.getImage()),
                     cookbook.getCreatedAt(),
                     updateTime = new Timestamp(System.currentTimeMillis())
             );
@@ -138,7 +138,7 @@ public class MysqlCookbookDao implements CookbookDao {
         }
     }
 
-    public Cookbook save(Cookbook cookbook) throws EntityNotFoundException {
+    public Cookbook save(Cookbook cookbook) throws EntityNotFoundException, SQLException {
         Objects.requireNonNull(cookbook, "Cookbook cannot be null");
         Objects.requireNonNull(cookbook.getName(), "Cookbook name cannot be null");
         Objects.requireNonNull(cookbook.getCreatedAt(), "Cookbook time of creation cannot be null");

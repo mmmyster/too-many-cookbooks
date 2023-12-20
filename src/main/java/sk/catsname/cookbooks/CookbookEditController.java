@@ -22,6 +22,7 @@ import sk.catsname.cookbooks.storage.RecipeDao;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -69,7 +70,10 @@ public class CookbookEditController {
 
     @FXML
     void initialize() {
-        cookbookModel = new CookbookFxModel(currentCookbook);
+        if (currentCookbook != null) {
+            cookbookModel = new CookbookFxModel(currentCookbook);
+        }
+
         cookbookNameTextField.textProperty().bindBidirectional(cookbookModel.nameProperty());
 
         Callback<ListView<Recipe>, ListCell<Recipe>> cellFactory = new Callback<>() { // for displaying recipes as their names
@@ -110,7 +114,7 @@ public class CookbookEditController {
     }
 
     @FXML
-    void onAddCookbook(ActionEvent event) {
+    void onAddCookbook(ActionEvent event) throws SQLException {
         Cookbook cookbook = cookbookModel.getCookbook();
         CookbookDao cookbookDao = DaoFactory.INSTANCE.getCookbookDao();
         cookbook.setCreatedAt(new Timestamp(System.currentTimeMillis()));

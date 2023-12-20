@@ -1,5 +1,6 @@
 package sk.catsname.cookbooks.storage;
 
+import javafx.embed.swing.JFXPanel;
 import org.junit.jupiter.api.Test;
 import sk.catsname.cookbooks.Cookbook;
 import sk.catsname.cookbooks.Ingredient;
@@ -12,13 +13,13 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.*;
 
 class DaoTest {
     IngredientDao ingredientDao = DaoFactory.INSTANCE.getIngredientDao();
     RecipeDao recipeDao = DaoFactory.INSTANCE.getRecipeDao();
     CookbookDao cookbookDao = DaoFactory.INSTANCE.getCookbookDao();
-    ShoppingItemDao shoppingItemDao = DaoFactory.INSTANCE.getShoppingItemDao();
+
+    JFXPanel jfxPanel = new JFXPanel();
 
     @Test
     void fullSaveDaoTest() throws Exception {
