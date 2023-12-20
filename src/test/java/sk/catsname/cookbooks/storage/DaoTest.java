@@ -5,6 +5,7 @@ import sk.catsname.cookbooks.Cookbook;
 import sk.catsname.cookbooks.Ingredient;
 import sk.catsname.cookbooks.Recipe;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collections;
@@ -266,7 +267,7 @@ class DaoTest {
     }
 
     @Test
-    void fullDeleteDaoTest() {
+    void fullDeleteDaoTest() throws SQLException {
         Ingredient flourPM = new Ingredient("flour", 400, "g");
         Ingredient mozzarellaPM = new Ingredient("mozzarella", 10, "piece");
         Ingredient cheesePM = new Ingredient("cheese", 0.5f, "piece");
