@@ -42,7 +42,7 @@ public class CookbookEditController {
     private TextField cookbookNameTextField;
 
     @FXML
-    private Button deleteCookbookButton;
+    private Button deleteRecipeButton;
 
     @FXML
     private ListView<Recipe> recipeListView;
@@ -178,10 +178,9 @@ public class CookbookEditController {
     }
 
     @FXML
-    void onDeleteCookbook(ActionEvent event) {
-        // TODO: add ability delete cookbook
-        CookbookDao cookbookDao = DaoFactory.INSTANCE.getCookbookDao();
-        cookbookDao.delete(cookbookModel.getId());
+    void onDeleteRecipe(ActionEvent event) {
+        Recipe recipe = recipeListView.getSelectionModel().getSelectedItem();
+        recipeDao.deleteRecipeCookbook(recipe.getId());
     }
 
 }
