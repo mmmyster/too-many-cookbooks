@@ -10,5 +10,6 @@
       <TextField fx:id="searchTextField" layoutX="164.0" layoutY="55.0" prefHeight="28.0" prefWidth="216.0" styleClass="input-field" />
       <ListView fx:id="allRecipesListView" layoutX="164.0" layoutY="104.0" prefHeight="322.0" prefWidth="256.0" />
       <Button fx:id="addRecipeButton" layoutX="395.0" layoutY="56.0" mnemonicParsing="false" onAction="#onAddRecipe" text="+" />
+      <Button fx:id="newRecipeButton" layoutX="36.0" layoutY="129.0" mnemonicParsing="false" onAction="#onNewRecipeButton" text="New recipe" />
    </children>
 </AnchorPane>
