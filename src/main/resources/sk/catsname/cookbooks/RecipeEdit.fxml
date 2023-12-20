@@ -34,15 +34,16 @@
             </Label>
             <TextField fx:id="ingredientNameTextField" layoutX="366.0" layoutY="261.0" prefHeight="28.0" prefWidth="153.0" styleClass="input-field" />
             <ComboBox fx:id="unitComboBox" layoutX="364.0" layoutY="308.0" prefHeight="26.0" prefWidth="80.0" />
-            <Button fx:id="addIngredientButton" layoutX="364.0" layoutY="344.0" mnemonicParsing="false" onAction="#onAddIngredient" text="+" />
+            <Button fx:id="addIngredientButton" layoutX="368.0" layoutY="354.0" mnemonicParsing="false" onAction="#onAddIngredient" text="+" />
             <Label layoutX="87.0" layoutY="189.0" text="Ingredients:" />
             <Label layoutX="87.0" layoutY="395.0" text="Instructions:" />
             <TextField fx:id="amountTextField" layoutX="475.0" layoutY="307.0" prefHeight="26.0" prefWidth="47.0" styleClass="input-field" />
             <Button fx:id="addImageButton" layoutX="366.0" layoutY="76.0" mnemonicParsing="false" onAction="#onAddImage" text="Add image" />
             <Button fx:id="deleteRecipeButton" layoutX="444.0" layoutY="537.0" mnemonicParsing="false" onAction="#onDeleteRecipe" text="Delete" />
             <TextField fx:id="searchTextField" layoutX="86.0" layoutY="217.0" prefHeight="27.0" prefWidth="256.0" styleClass="input-field" />
-            <ListView fx:id="ingredientsListView" layoutX="86.0" layoutY="261.0" onMouseClicked="#addRecipe" prefHeight="119.0" prefWidth="256.0" />
+            <ListView fx:id="ingredientsListView" layoutX="86.0" layoutY="261.0" prefHeight="119.0" prefWidth="256.0" />
             <Label layoutX="366.0" layoutY="223.0" text="Add ingredient:" />
+            <Button fx:id="deleteIngredientButton" layoutX="497.0" layoutY="354.0" mnemonicParsing="false" onAction="#onDeleteIngredient" text="-" />
          </children>
       </AnchorPane>
    </content>
