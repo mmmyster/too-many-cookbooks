@@ -1,3 +1,56 @@
+.root {
+    -fx-pref-width: 430px;
+    -fx-pref-height: 932px;
+
+    -fx-font-family: "Arial";
+}
+
+.vbox {
+    -fx-background-color: #FDF7F1;
+}
+
+.label {
+    -fx-font-family: "Arial";
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+
+    -fx-padding: 22px 0 27px 0;
+}
+
+.title {
+    -fx-font-size: 32;
+    -fx-font-weight: bold;
+
+    -fx-padding: 0;
+}
+
 .input-field {
     -fx-border-color: #000;
+}
+
+.add-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+.wrapper {
+    -fx-background-color: #fff;
+    -fx-background-insets: 25px;
+    -fx-background-radius: 15;
+
+    -fx-border-color: #000;
+    -fx-border-radius: 15;
+    -fx-border-insets: 25px;
+    -fx-border-width: 3px;
+
+    -fx-alignment: CENTER;
+    -fx-padding: 27px 27px 0 27px;
+}
+
+.image-view-wrapper {
+    -fx-border-color: #000;
+    -fx-border-style: solid;
+    -fx-border-width: 3;
+    -fx-border-radius: 10;
 }

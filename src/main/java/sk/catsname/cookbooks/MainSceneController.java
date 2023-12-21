@@ -1,20 +1,22 @@
 package sk.catsname.cookbooks;
 
+import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Cursor;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.SnapshotParameters;
+import javafx.geometry.Orientation;
+import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -30,6 +32,9 @@ public class MainSceneController {
     CookbookDao cookbookDao = DaoFactory.INSTANCE.getCookbookDao();
 
     @FXML
+    private ScrollPane scrollPane;
+
+    @FXML
     private VBox vBox;
     @FXML
     private Button addCookbookButton;
@@ -38,8 +43,11 @@ public class MainSceneController {
 
     private Cookbook savedCookbook;
 
+    private int fromPos;
+
     @FXML
     void initialize() {
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         for (Cookbook cookbook : cookbookDao.getAll()) {
             ImageView imageView = new ImageView(cookbook.getImage());
@@ -49,8 +57,11 @@ public class MainSceneController {
 
             imageMakeover(imageView);
 
+            BorderPane imageViewWrapper = new BorderPane(imageView);
+            imageViewWrapper.setMaxWidth(imageView.getFitWidth());
+            imageViewWrapper.getStyleClass().add("image-view-wrapper");
+
             Label label = new Label(cookbook.getName());
-            label.setPadding(new Insets(0, 0, 20, 0));
 
             imageView.setOnMouseClicked(openCookbook);
             label.setOnMouseClicked(openCookbook);
@@ -58,8 +69,10 @@ public class MainSceneController {
             label.setCursor(Cursor.HAND);
             imageView.setCursor(Cursor.HAND);
 
-            vBox.getChildren().add(imageView);
-            vBox.getChildren().add(label);
+            VBox wrapper = new VBox(imageViewWrapper, label);
+            wrapper.getStyleClass().add("wrapper");
+
+            vBox.getChildren().add(wrapper);
         }
     }
 
@@ -77,6 +90,7 @@ public class MainSceneController {
         stage.show();
     }
 
+
     public void imageMakeover(ImageView imageView) {
         // set a clip to apply rounded border to the original image
         Rectangle clip = new Rectangle(imageView.getFitWidth(), 200);
@@ -91,9 +105,6 @@ public class MainSceneController {
 
         // remove the rounding clip so that our effect can show through
         imageView.setClip(null);
-
-        // apply a shadow effect
-        imageView.setEffect(new DropShadow(7, Color.BLACK));
 
         // store the rounded image in the imageView
         imageView.setImage(image);
@@ -119,3 +130,4 @@ public class MainSceneController {
     };
 
 }
+
