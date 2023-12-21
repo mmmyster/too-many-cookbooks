@@ -5,10 +5,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -20,13 +26,16 @@ public class RecipeViewController {
     private Button editRecipeButton;
 
     @FXML
-    private ImageView recipeImageView;
+    private HBox hBox;
 
     @FXML
     private Label titleLabel;
 
     @FXML
     private Label prepTimeLabel;
+
+    @FXML
+    private ScrollPane scrollPane;
 
     @FXML
     private Label servingsLabel;
@@ -51,10 +60,23 @@ public class RecipeViewController {
 
     @FXML
     void initialize() {
-        Image image = currentRecipe.getImage();
-        recipeImageView.setImage(image);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        ImageView imageView = new ImageView(currentRecipe.getImage());
+        imageView.setFitWidth(377);
+        imageView.setSmooth(true);
+        imageView.setPreserveRatio(true);
+
+        imageMakeover(imageView);
+
+        BorderPane imageViewWrapper = new BorderPane(imageView);
+        imageViewWrapper.setMaxWidth(imageView.getFitWidth());
+        imageViewWrapper.getStyleClass().add("image-view-wrapper");
+
+        hBox.getChildren().add(imageViewWrapper);
+
         titleLabel.setText(currentRecipe.getName());
-        prepTimeLabel.setText(String.valueOf(currentRecipe.getPreparationTime()));
+        prepTimeLabel.setText(String.valueOf(currentRecipe.getPreparationTime()) + "m");
         servingsLabel.setText(String.valueOf(currentRecipe.getServings()));
         StringJoiner ingredients = new StringJoiner("\n");
         for (Ingredient ingredient : currentRecipe.getIngredients()) {
@@ -77,6 +99,25 @@ public class RecipeViewController {
         stage.setTitle("Edit recipe");
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void imageMakeover(ImageView imageView) {
+        // set a clip to apply rounded border to the original image
+        Rectangle clip = new Rectangle(imageView.getFitWidth(), 277);
+        clip.setArcWidth(20);
+        clip.setArcHeight(20);
+        imageView.setClip(clip);
+
+        // snapshot the rounded image
+        SnapshotParameters parameters = new SnapshotParameters();
+        parameters.setFill(Color.TRANSPARENT);
+        WritableImage image = imageView.snapshot(parameters, null);
+
+        // remove the rounding clip so that our effect can show through
+        imageView.setClip(null);
+
+        // store the rounded image in the imageView
+        imageView.setImage(image);
     }
 
 }

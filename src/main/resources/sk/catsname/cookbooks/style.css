@@ -111,7 +111,8 @@
 }
 
 .list-view,
-.text-area {
+.text-area,
+.text-display {
     -fx-border-radius: 15;
     -fx-background-radius: 15;
     -fx-background-color: #fff;
@@ -138,6 +139,12 @@
 .text-area .scroll-pane .content {
     -fx-background-color: transparent;
     -fx-background-radius: 15;
+}
+
+.text-display {
+    -fx-font-size: 12px;
+    -fx-font-weight: normal ;
+    -fx-padding: 12px;
 }
 
 .combo-box-base {

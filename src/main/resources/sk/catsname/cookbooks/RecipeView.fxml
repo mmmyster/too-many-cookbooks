@@ -7,35 +7,34 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Line?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="559.0" prefViewportHeight="1000.0" prefViewportWidth="1000.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="559.0" prefViewportHeight="1000.0" prefViewportWidth="1000.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <content>
-    <AnchorPane prefHeight="499.0" prefWidth="598.0">
+    <AnchorPane prefHeight="499.0" prefWidth="598.0" styleClass="anchor-pane">
          <children>
-            <ImageView fx:id="recipeImageView" fitHeight="208.0" fitWidth="316.0" layoutX="134.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true" />
-            <Label fx:id="titleLabel" layoutX="135.0" layoutY="286.0" prefHeight="30.0" prefWidth="316.0">
+            <Label fx:id="titleLabel" layoutX="73.0" layoutY="45.0" prefHeight="61.0" prefWidth="244.0" wrapText="true">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
             </Label>
-            <Label fx:id="ingredientsLabel" layoutX="135.0" layoutY="369.0" minHeight="20.0" prefWidth="312.0" wrapText="true" />
-            <Label fx:id="instructionsLabel" layoutX="135.0" layoutY="397.0" minHeight="20.0" prefWidth="312.0" wrapText="true" />
-            <Line endX="189.5" layoutX="293.0" layoutY="269.0" startX="-194.5" />
-            <Label fx:id="prepTimeLabel" layoutX="159.0" layoutY="329.0" prefHeight="20.0" prefWidth="60.0" text="Label" />
-            <Label fx:id="servingsLabel" layoutX="269.0" layoutY="329.0" prefHeight="20.0" prefWidth="60.0" text="Label" />
-            <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="135.0" layoutY="331.0" pickOnBounds="true" preserveRatio="true">
+            <Label fx:id="ingredientsLabel" layoutX="35.0" layoutY="508.0" minHeight="20.0" prefWidth="377.0" styleClass="text-display" wrapText="true" />
+            <Label fx:id="instructionsLabel" layoutX="36.0" layoutY="571.0" minHeight="20.0" prefWidth="377.0" styleClass="text-display" wrapText="true" />
+            <Label fx:id="prepTimeLabel" layoutX="86.0" layoutY="436.0" prefHeight="44.0" prefWidth="77.0" text="Label" />
+            <Label fx:id="servingsLabel" layoutX="226.0" layoutY="437.0" prefHeight="79.0" prefWidth="72.0" text="Label" />
+            <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="61.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@clock-regular.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="250.0" layoutY="333.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="202.0" layoutY="470.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@users-solid.png" />
                </image>
             </ImageView>
-            <Button fx:id="editRecipeButton" layoutX="81.0" layoutY="38.0" mnemonicParsing="false" onAction="#onEditRecipe" text="Edit" />
+            <Button fx:id="editRecipeButton" layoutX="330.0" layoutY="67.0" mnemonicParsing="false" onAction="#onEditRecipe" text="Edit" />
+            <HBox fx:id="hBox" layoutX="35.0" layoutY="148.0" prefHeight="277.0" prefWidth="377.0" />
          </children>
          <padding>
             <Insets bottom="25.0" />
