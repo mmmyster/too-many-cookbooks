@@ -1,15 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="459.0" prefWidth="583.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="459.0" prefWidth="583.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TextField fx:id="searchTextField" layoutX="164.0" layoutY="55.0" prefHeight="28.0" prefWidth="216.0" styleClass="input-field" />
-      <ListView fx:id="allRecipesListView" layoutX="164.0" layoutY="104.0" prefHeight="322.0" prefWidth="256.0" />
-      <Button fx:id="addRecipeButton" layoutX="395.0" layoutY="56.0" mnemonicParsing="false" onAction="#onAddRecipe" text="+" />
-      <Button fx:id="newRecipeButton" layoutX="36.0" layoutY="129.0" mnemonicParsing="false" onAction="#onNewRecipeButton" text="New recipe" />
+      <ListView fx:id="allRecipesListView" layoutX="23.0" layoutY="228.0" prefHeight="353.0" prefWidth="377.0" />
+      <Button fx:id="addRecipeButton" layoutX="333.0" layoutY="155.0" mnemonicParsing="false" onAction="#onAddRecipe" text="+">
+         <styleClass>
+            <String fx:value="add-button-green" />
+            <String fx:value="circle-button" />
+         </styleClass></Button>
+      <Button fx:id="newRecipeButton" layoutX="139.0" layoutY="712.0" mnemonicParsing="false" onAction="#onNewRecipeButton" prefHeight="70.0" prefWidth="173.0" text="New recipe">
+         <styleClass>
+            <String fx:value="add-button-yellow" />
+            <String fx:value="single-button" />
+         </styleClass></Button>
+      <TextField fx:id="searchTextField" layoutX="23.0" layoutY="152.0" prefHeight="56.0" prefWidth="280.0" promptText="Where is..." styleClass="input-field">
+         <padding>
+            <Insets left="37.0" />
+         </padding>
+      </TextField>
+      <Button fx:id="searchButton" layoutX="38.0" layoutY="166.0" maxHeight="16.0" maxWidth="16.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="12.0" styleClass="search-button" />
+      <Label layoutX="23.0" layoutY="75.0" styleClass="title" text="Pick a recipe">
+         <font>
+            <Font name="Arial" size="25.0" />
+         </font>
+      </Label>
+      <Label layoutX="23.0" layoutY="636.0" styleClass="title" text="...or create a new one">
+         <font>
+            <Font name="Arial" size="25.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

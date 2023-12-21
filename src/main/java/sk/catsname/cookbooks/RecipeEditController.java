@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -18,6 +19,8 @@ import sk.catsname.cookbooks.storage.DaoFactory;
 import sk.catsname.cookbooks.storage.RecipeDao;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -62,6 +65,12 @@ public class RecipeEditController {
     private TextField recipeNameTextField;
 
     @FXML
+    private ScrollPane scrollPane;
+
+    @FXML
+    private Button searchButton;
+
+    @FXML
     private TextField searchTextField;
 
     @FXML
@@ -87,7 +96,15 @@ public class RecipeEditController {
     }
 
     @FXML
-    public void initialize() {
+    public void initialize() throws FileNotFoundException {
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        Image image = new Image(new FileInputStream("src/main/resources/sk/catsname/cookbooks/magnifying-glass-solid.png"));
+        ImageView view = new ImageView(image);
+        view.setFitWidth(16);
+        view.setPreserveRatio(true);
+        searchButton.setGraphic(view);
+
         recipeNameTextField.textProperty().bindBidirectional(recipeModel.nameProperty());
         instructionsTextArea.textProperty().bindBidirectional(recipeModel.instructionsProperty());
         prepTimeTextField.textProperty().bindBidirectional(recipeModel.preparationTimeProperty());

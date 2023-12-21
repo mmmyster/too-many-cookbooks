@@ -11,11 +11,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import sk.catsname.cookbooks.storage.DaoFactory;
 import sk.catsname.cookbooks.storage.RecipeDao;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -31,6 +35,9 @@ public class RecipePickerController {
 
     @FXML
     private Button newRecipeButton;
+
+    @FXML
+    private Button searchButton;
 
     @FXML
     private TextField searchTextField;
@@ -51,7 +58,13 @@ public class RecipePickerController {
     }
 
     @FXML
-    void initialize() {
+    void initialize() throws FileNotFoundException {
+        Image image = new Image(new FileInputStream("src/main/resources/sk/catsname/cookbooks/magnifying-glass-solid.png"));
+        ImageView view = new ImageView(image);
+        view.setFitWidth(16);
+        view.setPreserveRatio(true);
+        searchButton.setGraphic(view);
+
         Callback<ListView<Recipe>, ListCell<Recipe>> cellFactory = new Callback<>() { // for displaying recipes as their names
             @Override
             public ListCell<Recipe> call(ListView<Recipe> param) {
