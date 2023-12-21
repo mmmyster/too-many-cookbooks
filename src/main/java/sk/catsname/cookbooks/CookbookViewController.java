@@ -87,6 +87,10 @@ public class CookbookViewController {
         stage.setTitle("Edit cookbook");
         stage.setScene(scene);
         stage.show();
+
+        // close the current view window
+        Stage currentStage = (Stage) editCookbookButton.getScene().getWindow();
+        currentStage.close();
     }
 
     public void imageMakeover(ImageView imageView) {

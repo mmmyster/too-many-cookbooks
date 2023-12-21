@@ -98,6 +98,10 @@ public class RecipePickerController {
 
     @FXML
     void onNewRecipeButton(ActionEvent event) throws IOException {
+        // close the current edit window
+        Stage currentStage = (Stage) addRecipeButton.getScene().getWindow();
+        currentStage.close();
+
         RecipeEditController controller = new RecipeEditController();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("RecipeEdit.fxml"));
         fxmlLoader.setController(controller);

@@ -114,7 +114,7 @@ public class RecipeEditController {
         instructionsTextArea.textProperty().bindBidirectional(recipeModel.instructionsProperty());
         prepTimeTextField.textProperty().bindBidirectional(recipeModel.preparationTimeProperty());
         servingsTextField.textProperty().bindBidirectional(recipeModel.servingsProperty());
-        ObservableList<String> units = FXCollections.observableArrayList("ml", "l", "dl", "tsp", "tbsp", "cup", "mg", "g", "kg");
+        ObservableList<String> units = FXCollections.observableArrayList("ml", "l", "tsp", "tbsp", "cup", "g", "kg", "piece");
         unitComboBox.getItems().clear();
         unitComboBox.setItems(units);
 
@@ -209,8 +209,11 @@ public class RecipeEditController {
         recipe.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         recipe.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         savedRecipe = recipeDao.save(recipe);
-        //Recipe loadedRecipe = recipeDao.getById(savedRecipe.getId());
         System.out.println(savedRecipe);
+
+        // close the current edit window
+        Stage currentStage = (Stage) addRecipeButton.getScene().getWindow();
+        currentStage.close();
 
         try {
             RecipeViewController controller = new RecipeViewController();

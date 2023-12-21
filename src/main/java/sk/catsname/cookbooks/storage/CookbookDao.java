@@ -15,4 +15,5 @@ public interface CookbookDao {
     void delete(Long id);
     void deleteCookbook(Long id) throws EntityNotFoundException;
     void deleteRecipeCookbook(Long id) throws EntityNotFoundException;
+    void deleteRecipeCookbook(Long recipeId, Long cookbookId) throws EntityNotFoundException;
 }

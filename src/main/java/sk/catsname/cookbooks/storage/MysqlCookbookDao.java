@@ -182,4 +182,12 @@ public class MysqlCookbookDao implements CookbookDao {
             throw new EntityNotFoundException("Cookbook with id " + id + " not found in recipe_cookbook table");
         }
     }
+
+    @Override
+    public void deleteRecipeCookbook(Long recipeId, Long cookbookId) throws EntityNotFoundException {
+        String query = "DELETE FROM recipe_cookbook WHERE cookbook_id = " + cookbookId +
+                " AND recipe_id = " + recipeId;
+
+        int count = jdbcTemplate.update(query);
+    }
 }

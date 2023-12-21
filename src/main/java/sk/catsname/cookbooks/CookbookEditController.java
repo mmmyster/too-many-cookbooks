@@ -116,16 +116,13 @@ public class CookbookEditController {
     @FXML
     void onAddCookbook(ActionEvent event) throws SQLException {
         Cookbook cookbook = cookbookModel.getCookbook();
+        cookbook.setId(currentCookbook.getId());
         CookbookDao cookbookDao = DaoFactory.INSTANCE.getCookbookDao();
-        cookbook.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-        cookbook.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         Cookbook savedCookbook = cookbookDao.save(cookbook);
-        Cookbook loadCookbook = cookbookDao.getById(savedCookbook.getId());
-        System.out.println(loadCookbook);
 
         try {
             CookbookViewController controller = new CookbookViewController();
-            controller.setCurrentCookbook(loadCookbook);
+            controller.setCurrentCookbook(savedCookbook);
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("CookbookView.fxml"));
             loader.setController(controller);
@@ -139,6 +136,10 @@ public class CookbookEditController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        // close the current edit window
+        Stage currentStage = (Stage) addCookbookButton.getScene().getWindow();
+        currentStage.close();
     }
 
     @FXML
@@ -183,7 +184,7 @@ public class CookbookEditController {
     @FXML
     void onDeleteRecipe(ActionEvent event) {
         Recipe recipe = recipeListView.getSelectionModel().getSelectedItem();
-        recipeDao.deleteRecipeCookbook(recipe.getId());
+        CookbookDao cookbookDao = DaoFactory.INSTANCE.getCookbookDao();
+        cookbookDao.deleteRecipeCookbook(recipe.getId(), currentCookbook.getId());
     }
-
 }
