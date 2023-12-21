@@ -178,9 +178,11 @@ public class MysqlCookbookDao implements CookbookDao {
 
         int count = jdbcTemplate.update(query);
 
+        /*
         if (count == 0) {
             throw new EntityNotFoundException("Cookbook with id " + id + " not found in recipe_cookbook table");
         }
+         */
     }
 
     @Override

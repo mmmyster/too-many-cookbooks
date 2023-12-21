@@ -83,6 +83,8 @@ public class CookbookEditController {
     void initialize() throws FileNotFoundException {
         if (currentCookbook != null) {
             cookbookModel = new CookbookFxModel(currentCookbook);
+        } else {
+            currentCookbook = new Cookbook();
         }
 
         cookbookNameTextField.textProperty().bindBidirectional(cookbookModel.nameProperty());
@@ -135,7 +137,15 @@ public class CookbookEditController {
         CookbookDao cookbookDao = DaoFactory.INSTANCE.getCookbookDao();
         Cookbook modelCookbook = cookbookModel.getCookbook();
         modelCookbook.setId(currentCookbook.getId());
-        Cookbook savedCookbook = cookbookDao.save(modelCookbook);
+
+        Cookbook savedCookbook;
+        if (currentCookbook.getId() == null) {
+            currentCookbook.setName(cookbookModel.getName());
+            currentCookbook.setRecipes(cookbookModel.getRecipes());
+            savedCookbook = cookbookDao.save(currentCookbook);
+        } else {
+            savedCookbook = cookbookDao.save(modelCookbook);
+        }
 
         try {
             CookbookViewController controller = new CookbookViewController();

@@ -13,6 +13,12 @@ public class Cookbook {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
+    public Cookbook() {
+        this.name = "";
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+        this.updatedAt = new Timestamp(System.currentTimeMillis());
+    }
+
     public Cookbook(Long id, String name,Image image, List<Recipe> recipes, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
         this.image = image;
