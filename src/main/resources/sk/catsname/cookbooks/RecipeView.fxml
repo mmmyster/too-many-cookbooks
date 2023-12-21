@@ -14,13 +14,13 @@
   <content>
     <AnchorPane prefHeight="499.0" prefWidth="598.0" styleClass="anchor-pane">
          <children>
-            <Label fx:id="titleLabel" layoutX="73.0" layoutY="45.0" prefHeight="61.0" prefWidth="244.0" wrapText="true">
+            <Label fx:id="titleLabel" layoutX="35.0" layoutY="54.0" prefHeight="79.0" prefWidth="273.0" wrapText="true">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
             </Label>
-            <Label fx:id="ingredientsLabel" layoutX="35.0" layoutY="508.0" minHeight="20.0" prefWidth="377.0" styleClass="text-display" wrapText="true" />
-            <Label fx:id="instructionsLabel" layoutX="36.0" layoutY="571.0" minHeight="20.0" prefWidth="377.0" styleClass="text-display" wrapText="true" />
+            <Label fx:id="ingredientsLabel" layoutX="35.0" layoutY="514.0" minHeight="20.0" prefWidth="377.0" styleClass="text-display" wrapText="true" />
+            <Label fx:id="instructionsLabel" layoutX="36.0" layoutY="567.0" minHeight="20.0" prefWidth="377.0" styleClass="text-display" wrapText="true" />
             <Label fx:id="prepTimeLabel" layoutX="86.0" layoutY="436.0" prefHeight="44.0" prefWidth="77.0" text="Label" />
             <Label fx:id="servingsLabel" layoutX="226.0" layoutY="437.0" prefHeight="79.0" prefWidth="72.0" text="Label" />
             <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="61.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true">
@@ -33,7 +33,7 @@
                   <Image url="@users-solid.png" />
                </image>
             </ImageView>
-            <Button fx:id="editRecipeButton" layoutX="330.0" layoutY="67.0" mnemonicParsing="false" onAction="#onEditRecipe" text="Edit" />
+            <Button fx:id="editRecipeButton" layoutX="330.0" layoutY="76.0" mnemonicParsing="false" onAction="#onEditRecipe" text="Edit" />
             <HBox fx:id="hBox" layoutX="35.0" layoutY="148.0" prefHeight="277.0" prefWidth="377.0" />
          </children>
          <padding>
