@@ -68,12 +68,14 @@ public class MysqlRecipeDao implements RecipeDao{
     }
 
     @Override
-    public Recipe save(Recipe recipe) throws EntityNotFoundException {
+    public Recipe save(Recipe recipe) throws EntityNotFoundException, SQLException {
         // sets the objects that require to eb null to be null
         Objects.requireNonNull(recipe, "Recipe cannot be null");
         Objects.requireNonNull(recipe.getName(), "Recipe name cannot be null");
         Objects.requireNonNull(recipe.getCreatedAt(), "Recipe time of creation cannot be null");
         Objects.requireNonNull(recipe.getUpdatedAt(), "Recipe time of last update cannot be null");
+
+        if (recipe.getImage() == null) { recipe.setImage(new Image("sk/catsname/cookbooks/no_image_sad.jpg")); }
 
         if (recipe.getId() == null) { // INSERT
             String query = "INSERT INTO recipe (name, image, prep_time, servings, instructions, created_at, updated_at) " +
@@ -120,7 +122,7 @@ public class MysqlRecipeDao implements RecipeDao{
 
             int count = jdbcTemplate.update(query,
                     recipe.getName(),
-                    recipe.getImage(),
+                    KimKitsuragi.convertImageToBlob(recipe.getImage()),
                     recipe.getPreparationTime(),
                     recipe.getServings(),
                     recipe.getInstructions(),

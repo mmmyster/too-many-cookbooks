@@ -42,7 +42,7 @@ public class RecipePickerController {
     @FXML
     private TextField searchTextField;
 
-    private CookbookFxModel cookbookModel;
+    public CookbookFxModel cookbookModel;
 
     public RecipePickerController() {
         cookbookModel = new CookbookFxModel();
@@ -106,11 +106,15 @@ public class RecipePickerController {
     void onAddRecipe(ActionEvent event) {
         Recipe recipe = allRecipesListView.getSelectionModel().getSelectedItem();
         cookbookModel.recipesModel().add(recipe);
-        System.out.println(recipe); // TODO: add recipes to database/pass to cookbook edit controller
+        System.out.println(recipe);
     }
 
     @FXML
     void onNewRecipeButton(ActionEvent event) throws IOException {
+        // close the current edit window
+        Stage currentStage = (Stage) addRecipeButton.getScene().getWindow();
+        currentStage.close();
+
         RecipeEditController controller = new RecipeEditController();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("RecipeEdit.fxml"));
         fxmlLoader.setController(controller);

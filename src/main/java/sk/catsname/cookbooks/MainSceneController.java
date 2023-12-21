@@ -69,6 +69,10 @@ public class MainSceneController {
             label.setCursor(Cursor.HAND);
             imageView.setCursor(Cursor.HAND);
 
+            // sets the user data for the image and the label to be the cookbook they symbolize
+            label.setUserData(cookbook);
+            imageView.setUserData(cookbook);
+
             VBox wrapper = new VBox(imageViewWrapper, label);
             wrapper.getStyleClass().add("wrapper");
 
@@ -113,7 +117,8 @@ public class MainSceneController {
     EventHandler<MouseEvent> openCookbook = (event) -> {
         try {
             CookbookViewController controller = new CookbookViewController();
-            // TODO: add requested cookbook
+            Node clickedNode = (Node) event.getSource(); // gets the currently clicked node
+            controller.setCurrentCookbook((Cookbook) clickedNode.getUserData()); // sets the current cookbook based on the user data of the clicked node
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("CookbookView.fxml"));
             loader.setController(controller);

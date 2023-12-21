@@ -1,5 +1,7 @@
 package sk.catsname.cookbooks;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -16,12 +18,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import sk.catsname.cookbooks.storage.DaoFactory;
+import sk.catsname.cookbooks.storage.IngredientDao;
 import sk.catsname.cookbooks.storage.RecipeDao;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -81,6 +85,8 @@ public class RecipeEditController {
 
     private RecipeFxModel recipeModel;
 
+    public Recipe editedRecipe;
+
     public RecipeEditController() {
         recipeModel = new RecipeFxModel();
     }
@@ -97,6 +103,22 @@ public class RecipeEditController {
 
     @FXML
     public void initialize() throws FileNotFoundException {
+        if (editedRecipe != null) { // if the recipe id is not null (we have an existing recipe)
+            recipeModel = new RecipeFxModel(editedRecipe); // we set the model according to its recipe so the edit is already filled in with recipe's data
+        }
+
+        /*
+        recipeModel.setId(editedRecipe.getId());
+        recipeModel.setName(editedRecipe.getName());
+        recipeModel.setImage(editedRecipe.getImage());
+        recipeModel.setPreparationTime(editedRecipe.getPreparationTime());
+        recipeModel.setServings(editedRecipe.getServings());
+        recipeModel.setIngredients(FXCollections.observableList(editedRecipe.getIngredients()));
+        recipeModel.setInstructions(editedRecipe.getInstructions());
+        recipeModel.setCreatedAt(editedRecipe.getCreatedAt());
+        recipeModel.setUpdatedAt(editedRecipe.getUpdatedAt());
+         */
+
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         Image image = new Image(new FileInputStream("src/main/resources/sk/catsname/cookbooks/magnifying-glass-solid.png"));
@@ -109,7 +131,7 @@ public class RecipeEditController {
         instructionsTextArea.textProperty().bindBidirectional(recipeModel.instructionsProperty());
         prepTimeTextField.textProperty().bindBidirectional(recipeModel.preparationTimeProperty());
         servingsTextField.textProperty().bindBidirectional(recipeModel.servingsProperty());
-        ObservableList<String> units = FXCollections.observableArrayList("ml", "l", "dl", "tsp", "tbsp", "cup", "mg", "g", "kg");
+        ObservableList<String> units = FXCollections.observableArrayList("ml", "l", "tsp", "tbsp", "cup", "g", "kg", "piece");
         unitComboBox.getItems().clear();
         unitComboBox.setItems(units);
 
@@ -148,6 +170,11 @@ public class RecipeEditController {
         });
 
         ingredientsListView.setItems(filteredData);
+        System.out.println(recipeModel.getId());
+        System.out.println(recipeModel.getName());
+        System.out.println(recipeModel.getIngredients());
+        System.out.println(recipeModel.getCreatedAt());
+        System.out.println(recipeModel.getUpdatedAt());
     }
 
     @FXML
@@ -171,7 +198,6 @@ public class RecipeEditController {
 
         if (file != null) {
             recipeModel.setImage(new Image(file.toURI().toString(), 500, 500, true, true));
-            System.out.println("Vybratý súbor: " + file); // TODO: test output, remove later
         }
     }
 
@@ -189,22 +215,26 @@ public class RecipeEditController {
     @FXML
     void onDeleteIngredient(ActionEvent event) {
         Ingredient ingredient = ingredientsListView.getSelectionModel().getSelectedItem();
-        System.out.println(ingredient); // TODO: add ability delete ingredient
+        IngredientDao ingredientDao = DaoFactory.INSTANCE.getIngredientDao();
+        ingredientDao.deleteIngredientRecipe(ingredient.getId());
     }
 
     @FXML
-    void onAddRecipe(ActionEvent event) {
+    void onAddRecipe(ActionEvent event) throws SQLException {
         Recipe recipe = recipeModel.getRecipe();
         RecipeDao recipeDao = DaoFactory.INSTANCE.getRecipeDao();
         recipe.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         recipe.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         savedRecipe = recipeDao.save(recipe);
-        Recipe loadedRecipe = recipeDao.getById(savedRecipe.getId());
-        System.out.println(loadedRecipe);
+        System.out.println(savedRecipe);
+
+        // close the current edit window
+        Stage currentStage = (Stage) addRecipeButton.getScene().getWindow();
+        currentStage.close();
 
         try {
             RecipeViewController controller = new RecipeViewController();
-            controller.setCurrentRecipe(loadedRecipe);
+            controller.setCurrentRecipe(savedRecipe);
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("RecipeView.fxml"));
             loader.setController(controller);
@@ -222,6 +252,6 @@ public class RecipeEditController {
 
     @FXML
     void onDeleteRecipe(ActionEvent event) {
-        // TODO: add ability to delete recipe
+        recipeDao.delete(editedRecipe.getId());
     }
 }

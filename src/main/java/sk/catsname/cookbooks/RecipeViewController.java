@@ -88,8 +88,13 @@ public class RecipeViewController {
     }
 
     @FXML
-    void onEditRecipe(ActionEvent event) throws IOException { // TODO: edit book i had open
+    void onEditRecipe(ActionEvent event) throws IOException {
+        // close the current view window
+        Stage currentStage = (Stage) editRecipeButton.getScene().getWindow();
+        currentStage.close();
+
         RecipeEditController controller = new RecipeEditController();
+        controller.editedRecipe = currentRecipe;
         FXMLLoader fxmlLoader = new FXMLLoader(MainScene.class.getResource("RecipeEdit.fxml"));
         fxmlLoader.setController(controller);
         Parent parent = fxmlLoader.load();

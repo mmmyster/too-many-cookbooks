@@ -1,23 +1,25 @@
 package sk.catsname.cookbooks.storage;
 
+import javafx.embed.swing.JFXPanel;
 import org.junit.jupiter.api.Test;
 import sk.catsname.cookbooks.Cookbook;
 import sk.catsname.cookbooks.Ingredient;
 import sk.catsname.cookbooks.Recipe;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.*;
 
 class DaoTest {
     IngredientDao ingredientDao = DaoFactory.INSTANCE.getIngredientDao();
     RecipeDao recipeDao = DaoFactory.INSTANCE.getRecipeDao();
     CookbookDao cookbookDao = DaoFactory.INSTANCE.getCookbookDao();
-    ShoppingItemDao shoppingItemDao = DaoFactory.INSTANCE.getShoppingItemDao();
+
+    JFXPanel jfxPanel = new JFXPanel();
 
     @Test
     void fullSaveDaoTest() throws Exception {
@@ -266,7 +268,7 @@ class DaoTest {
     }
 
     @Test
-    void fullDeleteDaoTest() {
+    void fullDeleteDaoTest() throws SQLException {
         Ingredient flourPM = new Ingredient("flour", 400, "g");
         Ingredient mozzarellaPM = new Ingredient("mozzarella", 10, "piece");
         Ingredient cheesePM = new Ingredient("cheese", 0.5f, "piece");

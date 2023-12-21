@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -48,7 +49,7 @@ public class CookbookEditController {
     private Button deleteRecipeButton;
 
     @FXML
-    private Button deleteCookbookButton;
+    private Button deleteRecipeButton;
 
     @FXML
     private ListView<Recipe> recipeListView;
@@ -60,6 +61,7 @@ public class CookbookEditController {
     private TextField searchTextField;
 
     private CookbookFxModel cookbookModel;
+    public Cookbook currentCookbook;
 
     public CookbookEditController() {
         cookbookModel = new CookbookFxModel();
@@ -77,6 +79,10 @@ public class CookbookEditController {
 
     @FXML
     void initialize() throws FileNotFoundException {
+        if (currentCookbook != null) {
+            cookbookModel = new CookbookFxModel(currentCookbook);
+        }
+        
         cookbookNameTextField.textProperty().bindBidirectional(cookbookModel.nameProperty());
 
         Image image = new Image(new FileInputStream("src/main/resources/sk/catsname/cookbooks/magnifying-glass-solid.png"));
@@ -123,18 +129,15 @@ public class CookbookEditController {
     }
 
     @FXML
-    void onAddCookbook(ActionEvent event) {
-        Cookbook cookbook = cookbookModel.getCookbook();
+    void onAddCookbook(ActionEvent event) throws SQLException {
         CookbookDao cookbookDao = DaoFactory.INSTANCE.getCookbookDao();
-        cookbook.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-        cookbook.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-        Cookbook savedCookbook = cookbookDao.save(cookbook);
-        Cookbook loadCookbook = cookbookDao.getById(savedCookbook.getId());
-        System.out.println(loadCookbook);
+        Cookbook modelCookbook = cookbookModel.getCookbook();
+        modelCookbook.setId(currentCookbook.getId());
+        Cookbook savedCookbook = cookbookDao.save(modelCookbook);
 
         try {
             CookbookViewController controller = new CookbookViewController();
-            controller.setSavedCookbook(loadCookbook);
+            controller.setCurrentCookbook(savedCookbook);
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("CookbookView.fxml"));
             loader.setController(controller);
@@ -148,6 +151,10 @@ public class CookbookEditController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        // close the current edit window
+        Stage currentStage = (Stage) addCookbookButton.getScene().getWindow();
+        currentStage.close();
     }
 
     @FXML
@@ -171,13 +178,13 @@ public class CookbookEditController {
 
         if (file != null) {
             cookbookModel.setImage(new Image(file.toURI().toString(), 500, 500, true, true));
-            System.out.println("Vybratý súbor: " + file); // TODO: test output, remove later
         }
     }
 
     @FXML
     void onNewRecipe(ActionEvent event) throws IOException {
         RecipePickerController controller = new RecipePickerController();
+        controller.cookbookModel = this.cookbookModel;
         FXMLLoader fxmlLoader = new FXMLLoader(MainScene.class.getResource("RecipePicker.fxml"));
         fxmlLoader.setController(controller);
         Parent parent = fxmlLoader.load();
@@ -196,8 +203,10 @@ public class CookbookEditController {
     }
 
     @FXML
-    void onDeleteCookbook(ActionEvent event) {
-        // TODO: add ability delete cookbook
+    void onDeleteRecipe(ActionEvent event) {
+        Recipe recipe = recipeListView.getSelectionModel().getSelectedItem();
+        CookbookDao cookbookDao = DaoFactory.INSTANCE.getCookbookDao();
+        cookbookDao.deleteRecipeCookbook(recipe.getId(), currentCookbook.getId());
+        cookbookModel.getRecipes().remove(recipe);
     }
-
 }

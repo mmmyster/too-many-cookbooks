@@ -53,7 +53,7 @@ public class MysqlCookbookDao implements CookbookDao {
     }
 
     @Override
-    public Cookbook saveCookbook(Cookbook cookbook) throws EntityNotFoundException {
+    public Cookbook saveCookbook(Cookbook cookbook) throws EntityNotFoundException, SQLException {
         // sets the objects that require to be null to be null
         Objects.requireNonNull(cookbook, "Cookbook cannot be null");
 
@@ -88,7 +88,7 @@ public class MysqlCookbookDao implements CookbookDao {
 
             int count = jdbcTemplate.update(query,
                     cookbook.getName(),
-                    cookbook.getImage(),
+                    KimKitsuragi.convertImageToBlob(cookbook.getImage()),
                     cookbook.getCreatedAt(),
                     updateTime = new Timestamp(System.currentTimeMillis())
             );
@@ -138,11 +138,13 @@ public class MysqlCookbookDao implements CookbookDao {
         }
     }
 
-    public Cookbook save(Cookbook cookbook) throws EntityNotFoundException {
+    public Cookbook save(Cookbook cookbook) throws EntityNotFoundException, SQLException {
         Objects.requireNonNull(cookbook, "Cookbook cannot be null");
         Objects.requireNonNull(cookbook.getName(), "Cookbook name cannot be null");
         Objects.requireNonNull(cookbook.getCreatedAt(), "Cookbook time of creation cannot be null");
         Objects.requireNonNull(cookbook.getUpdatedAt(), "Cookbook time of last update cannot be null");
+
+        if (cookbook.getImage() == null) { cookbook.setImage(new Image("sk/catsname/cookbooks/no_image_sad.jpg")); }
 
         Cookbook savedCookbook = saveCookbook(cookbook); // first a new cookbook is saved
 
@@ -179,5 +181,13 @@ public class MysqlCookbookDao implements CookbookDao {
         if (count == 0) {
             throw new EntityNotFoundException("Cookbook with id " + id + " not found in recipe_cookbook table");
         }
+    }
+
+    @Override
+    public void deleteRecipeCookbook(Long recipeId, Long cookbookId) throws EntityNotFoundException {
+        String query = "DELETE FROM recipe_cookbook WHERE cookbook_id = " + cookbookId +
+                " AND recipe_id = " + recipeId;
+
+        int count = jdbcTemplate.update(query);
     }
 }
