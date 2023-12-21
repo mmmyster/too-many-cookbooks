@@ -12,6 +12,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -21,6 +22,8 @@ import sk.catsname.cookbooks.storage.DaoFactory;
 import sk.catsname.cookbooks.storage.RecipeDao;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -42,10 +45,16 @@ public class CookbookEditController {
     private TextField cookbookNameTextField;
 
     @FXML
+    private Button deleteRecipeButton;
+
+    @FXML
     private Button deleteCookbookButton;
 
     @FXML
     private ListView<Recipe> recipeListView;
+
+    @FXML
+    private Button searchButton;
 
     @FXML
     private TextField searchTextField;
@@ -67,8 +76,14 @@ public class CookbookEditController {
     }
 
     @FXML
-    void initialize() {
+    void initialize() throws FileNotFoundException {
         cookbookNameTextField.textProperty().bindBidirectional(cookbookModel.nameProperty());
+
+        Image image = new Image(new FileInputStream("src/main/resources/sk/catsname/cookbooks/magnifying-glass-solid.png"));
+        ImageView view = new ImageView(image);
+        view.setFitWidth(16);
+        view.setPreserveRatio(true);
+        searchButton.setGraphic(view);
 
         Callback<ListView<Recipe>, ListCell<Recipe>> cellFactory = new Callback<>() { // for displaying recipes as their names
             @Override
@@ -172,6 +187,12 @@ public class CookbookEditController {
         stage.setTitle("Pick recipes");
         stage.setScene(scene);
         stage.show();
+    }
+
+    @FXML
+    void onDeleteRecipe(ActionEvent event) {
+        Recipe recipe = recipeListView.getSelectionModel().getSelectedItem();
+        recipeDao.deleteRecipeCookbook(recipe.getId());
     }
 
     @FXML
