@@ -33,6 +33,8 @@ public class CookbookEditController {
 
     RecipeDao recipeDao = DaoFactory.INSTANCE.getRecipeDao();
 
+    CookbookDao cookbookDao = DaoFactory.INSTANCE.getCookbookDao();
+
     @FXML
     private Button addCookbookButton;
 
@@ -46,7 +48,7 @@ public class CookbookEditController {
     private TextField cookbookNameTextField;
 
     @FXML
-    private Button deleteRecipeButton;
+    private Button deleteCookbookButton;
 
     @FXML
     private Button deleteRecipeButton;
@@ -82,7 +84,7 @@ public class CookbookEditController {
         if (currentCookbook != null) {
             cookbookModel = new CookbookFxModel(currentCookbook);
         }
-        
+
         cookbookNameTextField.textProperty().bindBidirectional(cookbookModel.nameProperty());
 
         Image image = new Image(new FileInputStream("src/main/resources/sk/catsname/cookbooks/magnifying-glass-solid.png"));
@@ -197,9 +199,8 @@ public class CookbookEditController {
     }
 
     @FXML
-    void onDeleteRecipe(ActionEvent event) {
-        Recipe recipe = recipeListView.getSelectionModel().getSelectedItem();
-        recipeDao.deleteRecipeCookbook(recipe.getId());
+    void onDeleteCookbook(ActionEvent event) {
+        cookbookDao.delete(currentCookbook.getId());
     }
 
     @FXML
