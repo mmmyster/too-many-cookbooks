@@ -115,10 +115,10 @@ public class CookbookEditController {
 
     @FXML
     void onAddCookbook(ActionEvent event) throws SQLException {
-        Cookbook cookbook = cookbookModel.getCookbook();
-        cookbook.setId(currentCookbook.getId());
         CookbookDao cookbookDao = DaoFactory.INSTANCE.getCookbookDao();
-        Cookbook savedCookbook = cookbookDao.save(cookbook);
+        Cookbook modelCookbook = cookbookModel.getCookbook();
+        modelCookbook.setId(currentCookbook.getId());
+        Cookbook savedCookbook = cookbookDao.save(modelCookbook);
 
         try {
             CookbookViewController controller = new CookbookViewController();
@@ -186,5 +186,6 @@ public class CookbookEditController {
         Recipe recipe = recipeListView.getSelectionModel().getSelectedItem();
         CookbookDao cookbookDao = DaoFactory.INSTANCE.getCookbookDao();
         cookbookDao.deleteRecipeCookbook(recipe.getId(), currentCookbook.getId());
+        cookbookModel.getRecipes().remove(recipe);
     }
 }
