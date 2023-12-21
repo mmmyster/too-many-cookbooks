@@ -143,7 +143,7 @@
 
 .text-display {
     -fx-font-size: 12px;
-    -fx-font-weight: normal ;
+    -fx-font-weight: normal;
     -fx-padding: 12px;
 }
 
@@ -199,3 +199,14 @@
     -fx-border-width: 3;
     -fx-border-radius: 10;
 }
+
+.hbox {
+    -fx-spacing: 50;
+    -fx-padding: 0;
+    -fx-alignment: center-left;
+}
+
+.hbox.wrapper .label {
+    -fx-font-size: 25px;
+}
+

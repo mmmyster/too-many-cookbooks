@@ -8,10 +8,12 @@ import javafx.geometry.Insets;
 import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -27,6 +29,9 @@ public class CookbookViewController {
 
     @FXML
     private Button editCookbookButton;
+
+    @FXML
+    private ScrollPane scrollPane;
 
     @FXML
     private VBox vBox;
@@ -45,15 +50,21 @@ public class CookbookViewController {
 
     @FXML
     void initialize() {
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
         IngredientDao ingredientDao = DaoFactory.INSTANCE.getIngredientDao();
 
         for (Recipe recipe : currentCookbook.getRecipes()) {
             ImageView imageView = new ImageView(recipe.getImage());
-            imageView.setFitWidth(300);
+            imageView.setFitWidth(150);
             imageView.setSmooth(true);
             imageView.setPreserveRatio(true);
 
             imageMakeover(imageView);
+
+            BorderPane imageViewWrapper = new BorderPane(imageView);
+            imageViewWrapper.setMaxWidth(imageView.getFitWidth());
+            imageViewWrapper.getStyleClass().add("image-view-wrapper");
 
             Label label = new Label(recipe.getName());
             label.setPadding(new Insets(0, 0, 20, 0));
@@ -68,7 +79,10 @@ public class CookbookViewController {
             label.setUserData(recipe);
             imageView.setUserData(recipe);
 
-            HBox hBox = new HBox(label, imageView);
+            HBox hBox = new HBox(imageViewWrapper, label);
+            hBox.setMaxHeight(imageViewWrapper.getMaxHeight());
+            hBox.getStyleClass().add("wrapper");
+            hBox.getStyleClass().add("hbox");
             vBox.getChildren().add(hBox);
         }
 
@@ -95,7 +109,7 @@ public class CookbookViewController {
 
     public void imageMakeover(ImageView imageView) {
         // set a clip to apply rounded border to the original image
-        Rectangle clip = new Rectangle(imageView.getFitWidth(), 200);
+        Rectangle clip = new Rectangle(imageView.getFitWidth(), 100);
         clip.setArcWidth(20);
         clip.setArcHeight(20);
         imageView.setClip(clip);
@@ -107,9 +121,6 @@ public class CookbookViewController {
 
         // remove the rounding clip so that our effect can show through
         imageView.setClip(null);
-
-        // apply a shadow effect
-        imageView.setEffect(new DropShadow(7, Color.BLACK));
 
         // store the rounded image in the imageView
         imageView.setImage(image);
