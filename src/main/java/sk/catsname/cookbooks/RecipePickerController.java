@@ -59,12 +59,47 @@ public class RecipePickerController {
 
     @FXML
     void initialize() throws FileNotFoundException {
+        ControllerKeeper.recipePickerController = this;
+
         Image image = new Image(new FileInputStream("src/main/resources/sk/catsname/cookbooks/magnifying-glass-solid.png"));
         ImageView view = new ImageView(image);
         view.setFitWidth(16);
         view.setPreserveRatio(true);
         searchButton.setGraphic(view);
 
+        updateRecipes();
+    }
+
+    @FXML
+    void onAddRecipe(ActionEvent event) {
+        Recipe recipe = allRecipesListView.getSelectionModel().getSelectedItem();
+        cookbookModel.recipesModel().add(recipe);
+        System.out.println(recipe);
+
+        ControllerKeeper.cookbookEditController.updateRecipes();
+    }
+
+    @FXML
+    void onNewRecipeButton(ActionEvent event) throws IOException {
+        // close the current edit window
+        Stage currentStage = (Stage) addRecipeButton.getScene().getWindow();
+        currentStage.close();
+
+        RecipeEditController controller = new RecipeEditController();
+        controller.cookbookModel = cookbookModel; // we set the currently used cookbook model for RecipeEditController to use
+        controller.isFromPicker = true; // we also set isFromPicker to true, so when we save the recipe, picker is displayed instead of the recipe
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("RecipeEdit.fxml"));
+        fxmlLoader.setController(controller);
+        Parent parent = fxmlLoader.load();
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Too Many Cookbooks");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void updateRecipes() { // method for updating the display of recipes (I had some intentions with it, but it is redundant now, but it is used for better code readability)
         Callback<ListView<Recipe>, ListCell<Recipe>> cellFactory = new Callback<>() { // for displaying recipes as their names
             @Override
             public ListCell<Recipe> call(ListView<Recipe> param) {
@@ -101,30 +136,4 @@ public class RecipePickerController {
 
         allRecipesListView.setItems(filteredData);
     }
-
-    @FXML
-    void onAddRecipe(ActionEvent event) {
-        Recipe recipe = allRecipesListView.getSelectionModel().getSelectedItem();
-        cookbookModel.recipesModel().add(recipe);
-        System.out.println(recipe);
-    }
-
-    @FXML
-    void onNewRecipeButton(ActionEvent event) throws IOException {
-        // close the current edit window
-        Stage currentStage = (Stage) addRecipeButton.getScene().getWindow();
-        currentStage.close();
-
-        RecipeEditController controller = new RecipeEditController();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("RecipeEdit.fxml"));
-        fxmlLoader.setController(controller);
-        Parent parent = fxmlLoader.load();
-        Scene scene = new Scene(parent);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setTitle("Too Many Cookbooks");
-        stage.setScene(scene);
-        stage.show();
-    }
-
 }

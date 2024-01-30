@@ -1,6 +1,6 @@
 package sk.catsname.cookbooks;
 
-public class Ingredient {
+public class Ingredient implements Comparable<Ingredient> {
     private Long id;
     private String name;
     private Float amount;
@@ -62,5 +62,10 @@ public class Ingredient {
     @Override
     public String toString() {
         return amount + " " + unit + "  " + name;
+    }
+
+    @Override
+    public int compareTo(Ingredient o) {
+        return this.name.compareTo(o.getName());
     }
 }

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fx:id="scrollPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefViewportHeight="1000.0" prefViewportWidth="1000.0" prefWidth="600.0" stylesheets="@style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/20.0.1">
+<ScrollPane fx:id="scrollPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefViewportHeight="1000.0" prefViewportWidth="1000.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <AnchorPane prefHeight="932.0" prefWidth="430.0" styleClass="anchor-pane" stylesheets="@style.css">
          <children>
@@ -78,6 +78,7 @@
             <ComboBox fx:id="unitComboBox" layoutX="140.0" layoutY="796.0" prefWidth="150.0" />
             <Label layoutX="23.0" layoutY="856.0" text="Instructions" />
             <TextArea fx:id="instructionsTextArea" layoutX="25.0" layoutY="924.0" prefHeight="353.0" prefWidth="377.0" wrapText="true" />
+            <Label layoutX="245.0" layoutY="242.0" text="min." />
          </children>
       </AnchorPane>
    </content>

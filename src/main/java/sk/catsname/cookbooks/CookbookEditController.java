@@ -81,6 +81,8 @@ public class CookbookEditController {
 
     @FXML
     void initialize() throws FileNotFoundException {
+        ControllerKeeper.cookbookEditController = this;
+
         if (currentCookbook != null) {
             cookbookModel = new CookbookFxModel(currentCookbook);
         } else {
@@ -95,41 +97,7 @@ public class CookbookEditController {
         view.setPreserveRatio(true);
         searchButton.setGraphic(view);
 
-        Callback<ListView<Recipe>, ListCell<Recipe>> cellFactory = new Callback<>() { // for displaying recipes as their names
-            @Override
-            public ListCell<Recipe> call(ListView<Recipe> param) {
-                return new ListCell<>() {
-                    @Override
-                    protected void updateItem(Recipe recipe, boolean empty) {
-                        super.updateItem(recipe, empty);
-
-                        if (empty || recipe == null) {
-                            setText(null);
-                        } else {
-                            setText(recipe.getName());
-                        }
-                    }
-                };
-            }
-        };
-
-        recipeListView.setCellFactory(cellFactory);
-
-        FilteredList<Recipe> filteredData = new FilteredList<>(FXCollections.observableList(cookbookModel.getRecipes()), b -> true);
-
-        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(recipes -> {
-                if (newValue.isEmpty() || newValue.isBlank() || newValue == null) {
-                    return true;
-                }
-
-                String searchKeyword = newValue.toLowerCase();
-
-                return recipes.getName().toLowerCase().contains(searchKeyword);
-            });
-        });
-
-        recipeListView.setItems(filteredData);
+        updateRecipes();
     }
 
     @FXML
@@ -163,6 +131,8 @@ public class CookbookEditController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        ControllerKeeper.mainSceneController.updateCookbooks(); // cookbooks in main scene are updated
 
         // close the current edit window
         Stage currentStage = (Stage) addCookbookButton.getScene().getWindow();
@@ -210,7 +180,10 @@ public class CookbookEditController {
 
     @FXML
     void onDeleteCookbook(ActionEvent event) {
-        cookbookDao.delete(currentCookbook.getId());
+        cookbookDao.delete(currentCookbook.getId()); // a cookbook is deleted from the database
+        ControllerKeeper.mainSceneController.updateCookbooks(); // cookbooks displayed on main scene are updated
+        Stage currentStage = (Stage) deleteCookbookButton.getScene().getWindow();
+        currentStage.close(); // and current window is closed
     }
 
     @FXML
@@ -219,5 +192,45 @@ public class CookbookEditController {
         CookbookDao cookbookDao = DaoFactory.INSTANCE.getCookbookDao();
         cookbookDao.deleteRecipeCookbook(recipe.getId(), currentCookbook.getId());
         cookbookModel.getRecipes().remove(recipe);
+
+        updateRecipes();
+    }
+
+    public void updateRecipes() { // method for updating recipes in recipe display
+        Callback<ListView<Recipe>, ListCell<Recipe>> cellFactory = new Callback<>() { // for displaying recipes as their names
+            @Override
+            public ListCell<Recipe> call(ListView<Recipe> param) {
+                return new ListCell<>() {
+                    @Override
+                    protected void updateItem(Recipe recipe, boolean empty) {
+                        super.updateItem(recipe, empty);
+
+                        if (empty || recipe == null) {
+                            setText(null);
+                        } else {
+                            setText(recipe.getName());
+                        }
+                    }
+                };
+            }
+        };
+
+        recipeListView.setCellFactory(cellFactory);
+
+        FilteredList<Recipe> filteredData = new FilteredList<>(FXCollections.observableList(cookbookModel.getRecipes()), b -> true);
+
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(recipes -> {
+                if (newValue.isEmpty() || newValue.isBlank() || newValue == null) {
+                    return true;
+                }
+
+                String searchKeyword = newValue.toLowerCase();
+
+                return recipes.getName().toLowerCase().contains(searchKeyword);
+            });
+        });
+
+        recipeListView.setItems(filteredData);
     }
 }

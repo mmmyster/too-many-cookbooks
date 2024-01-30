@@ -9,7 +9,6 @@ import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
@@ -21,9 +20,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sk.catsname.cookbooks.storage.DaoFactory;
-import sk.catsname.cookbooks.storage.IngredientDao;
+import sk.catsname.cookbooks.storage.RecipeDao;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CookbookViewController {
 
@@ -40,6 +41,8 @@ public class CookbookViewController {
 
     private Cookbook currentCookbook;
 
+    private List<HBox> recipeHBoxes;
+
     public CookbookViewController() {
         cookbookModel = new CookbookFxModel();
     }
@@ -50,42 +53,12 @@ public class CookbookViewController {
 
     @FXML
     void initialize() {
+        ControllerKeeper.cookbookViewController = this;
+
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        recipeHBoxes = new ArrayList<HBox>();
 
-        IngredientDao ingredientDao = DaoFactory.INSTANCE.getIngredientDao();
-
-        for (Recipe recipe : currentCookbook.getRecipes()) {
-            ImageView imageView = new ImageView(recipe.getImage());
-            imageView.setFitWidth(150);
-            imageView.setSmooth(true);
-            imageView.setPreserveRatio(true);
-
-            imageMakeover(imageView);
-
-            BorderPane imageViewWrapper = new BorderPane(imageView);
-            imageViewWrapper.setMaxWidth(imageView.getFitWidth());
-            imageViewWrapper.getStyleClass().add("image-view-wrapper");
-
-            Label label = new Label(recipe.getName());
-            label.setPadding(new Insets(0, 0, 20, 0));
-
-            imageView.setOnMouseClicked(openRecipe);
-            label.setOnMouseClicked(openRecipe);
-
-            label.setCursor(Cursor.HAND);
-            imageView.setCursor(Cursor.HAND);
-
-            // sets the user data for the image and the label to be the recipe they symbolize
-            label.setUserData(recipe);
-            imageView.setUserData(recipe);
-
-            HBox hBox = new HBox(imageViewWrapper, label);
-            hBox.setMaxHeight(imageViewWrapper.getMaxHeight());
-            hBox.getStyleClass().add("wrapper");
-            hBox.getStyleClass().add("hbox");
-            vBox.getChildren().add(hBox);
-        }
-
+        updateRecipes();
     }
 
     @FXML
@@ -146,4 +119,49 @@ public class CookbookViewController {
         }
     };
 
+    public void updateRecipes() {
+        // removes all recipes
+        if (!recipeHBoxes.isEmpty()) {
+            VBox root = (VBox) recipeHBoxes.get(0).getParent();
+            for (HBox recipeHBox : recipeHBoxes) {
+                root.getChildren().remove(recipeHBox);
+            }
+            recipeHBoxes.clear();
+        }
+
+        // adds the recipes that are in database
+        RecipeDao recipeDao = DaoFactory.INSTANCE.getRecipeDao();
+        for (Recipe recipe : recipeDao.getAllByCookbookId(currentCookbook.getId())) {
+            ImageView imageView = new ImageView(recipe.getImage());
+            imageView.setFitWidth(150);
+            imageView.setSmooth(true);
+            imageView.setPreserveRatio(true);
+
+            imageMakeover(imageView);
+
+            BorderPane imageViewWrapper = new BorderPane(imageView);
+            imageViewWrapper.setMaxWidth(imageView.getFitWidth());
+            imageViewWrapper.getStyleClass().add("image-view-wrapper");
+
+            Label label = new Label(recipe.getName());
+            label.setPadding(new Insets(0, 0, 20, 0));
+
+            imageView.setOnMouseClicked(openRecipe);
+            label.setOnMouseClicked(openRecipe);
+
+            label.setCursor(Cursor.HAND);
+            imageView.setCursor(Cursor.HAND);
+
+            // sets the user data for the image and the label to be the recipe they symbolize
+            label.setUserData(recipe);
+            imageView.setUserData(recipe);
+
+            HBox hBox = new HBox(imageViewWrapper, label);
+            hBox.setMaxHeight(imageViewWrapper.getMaxHeight());
+            hBox.getStyleClass().add("wrapper");
+            hBox.getStyleClass().add("hbox");
+            vBox.getChildren().add(hBox);
+            recipeHBoxes.add(hBox);
+        }
+    }
 }

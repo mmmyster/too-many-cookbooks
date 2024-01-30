@@ -24,8 +24,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sk.catsname.cookbooks.storage.CookbookDao;
 import sk.catsname.cookbooks.storage.DaoFactory;
+import sk.catsname.cookbooks.storage.RecipeDao;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainSceneController {
 
@@ -45,39 +48,16 @@ public class MainSceneController {
 
     private int fromPos;
 
+    private List<VBox> cookbookVBoxes;
+
     @FXML
     void initialize() {
+        ControllerKeeper.mainSceneController = this;
+
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        cookbookVBoxes = new ArrayList<VBox>();
 
-        for (Cookbook cookbook : cookbookDao.getAll()) {
-            ImageView imageView = new ImageView(cookbook.getImage());
-            imageView.setFitWidth(300);
-            imageView.setSmooth(true);
-            imageView.setPreserveRatio(true);
-
-            imageMakeover(imageView);
-
-            BorderPane imageViewWrapper = new BorderPane(imageView);
-            imageViewWrapper.setMaxWidth(imageView.getFitWidth());
-            imageViewWrapper.getStyleClass().add("image-view-wrapper");
-
-            Label label = new Label(cookbook.getName());
-
-            imageView.setOnMouseClicked(openCookbook);
-            label.setOnMouseClicked(openCookbook);
-
-            label.setCursor(Cursor.HAND);
-            imageView.setCursor(Cursor.HAND);
-
-            // sets the user data for the image and the label to be the cookbook they symbolize
-            label.setUserData(cookbook);
-            imageView.setUserData(cookbook);
-
-            VBox wrapper = new VBox(imageViewWrapper, label);
-            wrapper.getStyleClass().add("wrapper");
-
-            vBox.getChildren().add(wrapper);
-        }
+        updateCookbooks();
     }
 
     @FXML
@@ -134,5 +114,47 @@ public class MainSceneController {
         }
     };
 
+    public void updateCookbooks() {
+        // removes all cookbooks
+        if (!cookbookVBoxes.isEmpty()) {
+            VBox root = (VBox) cookbookVBoxes.get(0).getParent();
+            for (VBox cookbookVBox : cookbookVBoxes) {
+                root.getChildren().remove(cookbookVBox);
+            }
+            cookbookVBoxes.clear();
+        }
+
+        // adds the cookbooks that are in database
+        for (Cookbook cookbook : cookbookDao.getAll()) {
+            ImageView imageView = new ImageView(cookbook.getImage());
+            imageView.setFitWidth(300);
+            imageView.setSmooth(true);
+            imageView.setPreserveRatio(true);
+
+            imageMakeover(imageView);
+
+            BorderPane imageViewWrapper = new BorderPane(imageView);
+            imageViewWrapper.setMaxWidth(imageView.getFitWidth());
+            imageViewWrapper.getStyleClass().add("image-view-wrapper");
+
+            Label label = new Label(cookbook.getName());
+
+            imageView.setOnMouseClicked(openCookbook);
+            label.setOnMouseClicked(openCookbook);
+
+            label.setCursor(Cursor.HAND);
+            imageView.setCursor(Cursor.HAND);
+
+            // sets the user data for the image and the label to be the cookbook they symbolize
+            label.setUserData(cookbook);
+            imageView.setUserData(cookbook);
+
+            VBox wrapper = new VBox(imageViewWrapper, label);
+            wrapper.getStyleClass().add("wrapper");
+
+            vBox.getChildren().add(wrapper);
+            cookbookVBoxes.add(wrapper);
+        }
+    }
 }
 
