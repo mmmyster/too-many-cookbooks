@@ -140,41 +140,8 @@ public class RecipeEditController {
         unitComboBox.getItems().clear();
         unitComboBox.setItems(units);
 
-        Callback<ListView<Ingredient>, ListCell<Ingredient>> cellFactory = new Callback<>() { // for displaying ingredients as their names
-            @Override
-            public ListCell<Ingredient> call(ListView<Ingredient> param) {
-                return new ListCell<>() {
-                    @Override
-                    protected void updateItem(Ingredient ingredient, boolean empty) {
-                        super.updateItem(ingredient, empty);
+        updateIngredients();
 
-                        if (empty || ingredient == null) {
-                            setText(null);
-                        } else {
-                            setText(ingredient.getName());
-                        }
-                    }
-                };
-            }
-        };
-
-        ingredientsListView.setCellFactory(cellFactory);
-
-        FilteredList<Ingredient> filteredData = new FilteredList<>(FXCollections.observableList(recipeModel.getIngredients()), b -> true);
-
-        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(ingredients -> {
-                if (newValue.isEmpty() || newValue.isBlank() || newValue == null) {
-                    return true;
-                }
-
-                String searchKeyword = newValue.toLowerCase();
-
-                return ingredients.getName().toLowerCase().contains(searchKeyword);
-            });
-        });
-
-        ingredientsListView.setItems(filteredData);
         System.out.println(recipeModel.getId());
         System.out.println(recipeModel.getName());
         System.out.println(recipeModel.getIngredients());
@@ -310,7 +277,7 @@ public class RecipeEditController {
                         if (empty || ingredient == null) {
                             setText(null);
                         } else {
-                            setText(ingredient.getName());
+                            setText(ingredient.getName() + " (" + ingredient.getAmount() + " " + ingredient.getUnit() + ")");
                         }
                     }
                 };
